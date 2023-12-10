@@ -1,5 +1,8 @@
 # graduation_exam
 
+## 画面遷移図
+https://www.figma.com/file/kSQhj82GR1bGsYK19OEChj/%E3%83%81%E3%83%BC%E3%83%A0%E9%96%8B%E7%99%BA%E5%8B%9F%E9%9B%86%E3%82%A2%E3%83%97%E3%83%AA?type=design&node-id=0-1&mode=design&t=0K9Rq6hdFPEHry2m-0
+
 ## ■ サービス概要
 - チーム開発を経験したい人を募集できるサービス
 - ただただ募集をするだけではなく、参加へのハードルを下げる仕組みも提供。参加への第一歩の負担を軽減する。
