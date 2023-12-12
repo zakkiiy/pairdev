@@ -1,5 +1,7 @@
-## ■ graduation_exam
-卒業試験のREADMEを提出いたします。ご確認のほどよろしくお願いいたします。
+# graduation_exam
+
+## 画面遷移図
+https://www.figma.com/file/kSQhj82GR1bGsYK19OEChj/%E3%83%81%E3%83%BC%E3%83%A0%E9%96%8B%E7%99%BA%E5%8B%9F%E9%9B%86%E3%82%A2%E3%83%97%E3%83%AA?type=design&node-id=0-1&mode=design&t=0K9Rq6hdFPEHry2m-0
 
 ## ■ サービス概要
 - チーム開発を経験したい人を募集できるサービス
@@ -67,7 +69,7 @@ MattermostやXでの宣伝。
 - 募集削除
 - 部屋でのリアルタイムチャット（ActionCable）
 - X共有機能
-- - QiitaAPIでの記事取得
+- QiitaAPIでの記事取得
 
 ### 本リリース
 - Line通知機能
@@ -76,6 +78,9 @@ MattermostやXでの宣伝。
 - RSpec(テスト)
 - マークダウン
 - 検索機能
+- お気に入り一覧
+- 自身の部屋作成一覧
+- 自身の部屋参加一覧
 
 ### 機能の実装方針予定
 フロントエンド：Next.js  
