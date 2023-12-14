@@ -9,6 +9,7 @@ erDiagram
 Users ||--|| Profiles : has
 Users ||--o{ Posts : creates
 Posts ||--o{ PostTags : places
+Categories || --o{ Posts : places
 Tags ||--o{ PostTags : places
 Posts ||--|| Rooms : has
 Rooms ||--o{ Messages : contains
@@ -42,12 +43,19 @@ Profiles {
 Posts {
 	bigint id PK
   bigint user_id FK
+  bigint category_id FK
 	string title
-	string category
 	datetime start_date
   datetime end_date
 	bigint recruiting_count
 	text description
+  datetime created_at
+  datetime updated_at
+}
+
+Categories {
+  bigint id PK
+  string name
   datetime created_at
   datetime updated_at
 }
