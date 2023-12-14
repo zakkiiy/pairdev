@@ -3,6 +3,103 @@
 ## 画面遷移図
 https://www.figma.com/file/kSQhj82GR1bGsYK19OEChj/%E3%83%81%E3%83%BC%E3%83%A0%E9%96%8B%E7%99%BA%E5%8B%9F%E9%9B%86%E3%82%A2%E3%83%97%E3%83%AA?type=design&node-id=0-1&mode=design&t=0K9Rq6hdFPEHry2m-0
 
+## ER図
+```mermaid
+erDiagram
+Users ||--|| Profiles : has
+Users ||--o{ Posts : creates
+Posts ||--o{ PostTags : places
+Categories || --o{ Posts : places
+Tags ||--o{ PostTags : places
+Posts ||--|| Rooms : has
+Rooms ||--o{ Messages : contains
+Users ||--o{ Messages : sends
+Users ||--o{ RoomUsers : in
+Rooms ||--o{ RoomUsers : joins
+
+Users {
+	bigint id PK
+	string github_name
+  string avatar_url
+  string provider
+  string uid
+  string line_user_id
+  datetime created_at
+  datetime updated_at
+}
+
+Profiles {
+	bigint id PK
+	bigint user_id FK
+  string local_name
+  string gender
+  bigint age
+  bigint experience
+  text description
+	datetime created_at
+  datetime updated_at
+}
+
+Posts {
+	bigint id PK
+  bigint user_id FK
+  bigint category_id FK
+	string title
+	datetime start_date
+  datetime end_date
+	bigint recruiting_count
+	text description
+  datetime created_at
+  datetime updated_at
+}
+
+Categories {
+  bigint id PK
+  string name
+  datetime created_at
+  datetime updated_at
+}
+
+Tags {
+	bigint id PK
+  string name
+  datetime created_at
+  datetime updated_at
+}
+
+PostTags {
+  bigint id PK
+	bigint post_id FK
+	bigint tag_id FK  
+	datetime created_at
+	datetime updated_at
+}
+
+Rooms {
+	bigint id PK
+  bigint post_id FK
+	datetime created_at
+	datetime updated_at
+}
+
+Messages {
+	bigint id PK
+  bigint user_id FK
+  bigint room_id FK
+	text content
+	datetime created_at
+	datetime updated_at
+}
+
+RoomUsers {
+	bigint id PK
+	bigint user_id FK
+	bigint room_id FK
+	datetime created_at
+	datetime updated_at
+}
+```
+
 ## ■ サービス概要
 - チーム開発を経験したい人を募集できるサービス
 - ただただ募集をするだけではなく、参加へのハードルを下げる仕組みも提供。参加への第一歩の負担を軽減する。
