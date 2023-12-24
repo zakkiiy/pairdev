@@ -84,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: app_production
-  username: app
-  password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+  database: pairdev_db_gpop
+  username: pairdev_db_gpop_user
+  url: <%= ENV['DATABASE_URL'] %>
