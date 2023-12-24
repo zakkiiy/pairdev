@@ -57,7 +57,6 @@ export default function Home() {
     <div>
 			{status === 'authenticated' ? (
 				<div>
-					<p>セッションの期限：{session.expires}</p>
 					<p>ようこそ、{session.user?.name}さん</p>
 					<img
 						src={session.user?.image ?? ``}
