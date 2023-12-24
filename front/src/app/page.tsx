@@ -59,7 +59,7 @@ export default function Home() {
           className="mr-2 p-2 border"
         />
         <button type="submit" className="p-2 bg-blue-500 text-white">
-          投稿する
+          投稿する。
         </button>
       </form>
       <ul>
