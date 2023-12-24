@@ -1,5 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSession } from 'next-auth/react';
+import Login from './components/Login';
+import Logout from './components/Logout';
 
 type Post = {
   id: number;
@@ -9,6 +12,8 @@ type Post = {
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [newTitle, setNewTitle] = useState("");
+
+  const { data: session, status } = useSession();
 
   const fetchPosts = async () => {
     try {
@@ -48,6 +53,25 @@ export default function Home() {
   };
 
   return (
+    <>
+    <div>
+			{status === 'authenticated' ? (
+				<div>
+					<p>セッションの期限：{session.expires}</p>
+					<p>ようこそ、{session.user?.name}さん</p>
+					<img
+						src={session.user?.image ?? ``}
+						alt=""
+						style={{ borderRadius: '50px' }}
+					/>
+					<div>
+						<Logout />
+					</div>
+				</div>
+			) : (
+				<Login />
+			)}
+		</div>
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <h2 className="text-3xl mb-4">記事の一覧</h2>
       <form onSubmit={handleSubmit} className="mt-4 mb-4">
@@ -59,7 +83,7 @@ export default function Home() {
           className="mr-2 p-2 border"
         />
         <button type="submit" className="p-2 bg-blue-500 text-white">
-          投稿する。
+          投稿する
         </button>
       </form>
       <ul>
@@ -68,5 +92,6 @@ export default function Home() {
         ))}
       </ul>
     </main>
+    </>
   );
 }
