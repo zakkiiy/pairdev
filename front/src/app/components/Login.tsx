@@ -11,9 +11,9 @@ export default function Login() {
 	if (status !== 'authenticated') {
 		return (
 			<div>
-				<p>あなたはログインしていません</p>
+				<p>以下からログインしてください。</p>
 				<button onClick={() => signIn('github', {}, { prompt: 'login' })}>
-					Guthubでログイン
+					GitHubでログイン
 				</button>
 			</div>
 		);
