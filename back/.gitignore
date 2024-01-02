@@ -30,3 +30,5 @@
 
 # envファイル
 .env
+
+.DS_Store
