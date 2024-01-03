@@ -4,11 +4,6 @@ import { useSession } from 'next-auth/react';
 import Login from './components/Login';
 import Logout from './components/Logout';
 
-type Post = {
-  id: number;
-  title: string;
-};
-
 export default function Home() {
 
   const { data: session, status } = useSession();
