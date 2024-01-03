@@ -14,7 +14,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="p-10">
+        <section className="p-10 bg-gray-100">
           <h2 className="text-2xl font-bold text-center">PairDevの特徴</h2>
           <div className="flex flex-wrap justify-center mt-6">
             <div className="w-full md:w-1/3 p-4">

@@ -2,6 +2,22 @@ import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import axios from 'axios';
 
+declare module "next-auth" {
+  /**
+   * セッション型を拡張
+   */
+  interface Session {
+    accessToken?: string;
+  }
+
+  /**
+   * ユーザー型を拡張
+   */
+  interface User {
+    id?: string;
+  }
+}
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const handler = NextAuth({
@@ -34,7 +50,7 @@ const handler = NextAuth({
 		},
 		async session({ session, token }) {
 			if (token.accessToken && token.id) {
-				session.accessToken = token.accessToken;
+				session.accessToken = token.accessToken as string;
 			}
 			return session;
 		},
