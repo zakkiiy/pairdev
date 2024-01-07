@@ -19,7 +19,7 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-6 items-center">
             <li>
-              <Link href="/posts/index">
+              <Link href="/posts">
                 <div className="flex items-center text-white hover:text-blue-400">
                   <FaListAlt className="mr-2" />募集一覧
                 </div>
@@ -33,7 +33,7 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link href="/user_posts/index">
+              <Link href="/user/posts">
                 <div className="flex items-center text-white hover:text-blue-400">
                   <FaUserCircle className="mr-2" />マイエリア
                 </div>

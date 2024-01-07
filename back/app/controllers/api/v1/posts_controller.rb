@@ -7,7 +7,7 @@ module Api
       # end
 
       def index
-        posts = Post.includes(:category).all
+        posts = Post.includes(:category).order(created_at: :desc).all
         posts_with_category_names = posts.map do |post|
           post.attributes.merge({ 'category_name' => post.category.name })
         end

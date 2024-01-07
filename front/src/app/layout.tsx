@@ -19,10 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} flex flex-col min-h-screen`}>
         <NextAuthProvider>
           <Header />
-            {children}
+            <main className="flex-1">
+              {children}
+            </main>
           <Footer />
         </NextAuthProvider>
       </body>
