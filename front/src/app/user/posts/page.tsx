@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { useSession } from 'next-auth/react';
-import Image from 'next/image'
 import useSWR from 'swr';
 import fetcherWithAuth from '../../utils/fetcher'
-import Link from 'next/link'
 import camelcaseKeys from "camelcase-keys";
+import Image from 'next/image'
 
 interface Post {
   [key: string]: unknown; 
@@ -19,10 +18,9 @@ interface Post {
   categoryName: string
 }
 
-export default function Home() {
+export default function UserPosts() {
   const { data: session, status } = useSession();
-  console.log(useSession());
-  const { data: rawPosts, error } = useSWR<Post[]>('/api/v1/posts', fetcherWithAuth); // fetcherWithAuthを使用
+  const { data: rawPosts, error } = useSWR('/api/v1/user_posts', fetcherWithAuth); // fetcherWithAuthを使用
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
 
   if (status === "loading") {
