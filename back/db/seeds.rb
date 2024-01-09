@@ -1,55 +1,44 @@
-# データを全消しする
+# db/seeds.rb
+
+# 既存のデータをクリア
 Post.delete_all
 Category.delete_all
 User.delete_all
 
+ActiveRecord::Base.connection.reset_pk_sequence!('categories')
+ActiveRecord::Base.connection.reset_pk_sequence!('posts')
+ActiveRecord::Base.connection.reset_pk_sequence!('users')
+
+# ユーザーを作成
+users = User.create([
+  { provider: "github", avatar_url: "https://avatars.githubusercontent.com/u/131367248?v=4", uid: "122", name: "ざっきー" },
+  { provider: "github", avatar_url: "https://example.com/avatar0.png", uid: "100", name: "ユーザー1" },
+  { provider: "github", avatar_url: "https://example.com/avatar1.png", uid: "101", name: "ユーザー2" },
+  { provider: "github", avatar_url: "https://example.com/avatar2.png", uid: "102", name: "ユーザー3" },
+  { provider: "github", avatar_url: "https://example.com/avatar3.png", uid: "103", name: "ユーザー4" }
+])
+
 # カテゴリーを作成
-categories = ["チーム開発", "ペアプログラミング", "GitHub-Flow"].map do |name|
-  Category.create!(name: name)
-end
+categories = Category.create([
+  { name: "チーム開発" },
+  { name: "ペアプログラミング" },
+  { name: "GitHub-Flow" }
+])
 
-# 特定のユーザーを作成または取得（既に存在する場合）
-user = User.find_or_create_by(uid: "131367248") do |u|
-  u.provider = "github"
-  u.avatar_url = "https://avatars.githubusercontent.com/u/131367248?v=4"
-  u.name = "ざっきー"
-end
-
-# 特定のユーザーに対してポストを作成
-3.times do |i|
-  Post.create!(
-    user_id: user.id,
-    category_id: categories.sample.id,  # ランダムにカテゴリを選択し、そのIDを設定
-    title: "Post #{i+1} by ざっきー",
-    start_date: Time.now,
-    end_date: Time.now + 5.days,
-    recruiting_count: 5,
-    description: "This is a sample post #{i+1} by ざっきー.",
-    status: 'open'
-  )
-end
-
-# 新しいユーザーとそのポストを作成
-3.times do |n|
-  new_user = User.create!(
-    provider: "github",
-    avatar_url: "https://example.com/avatar#{n}.png",
-    uid: "#{n+100}",
-    name: "ユーザー#{n+1}"
-  )
-
-  3.times do |i|
-    Post.create!(
-      user: new_user,
-      category_id: categories.sample.id,  # ランダムにカテゴリを選択し、そのIDを設定
-      title: "Post #{i+1} by ユーザー#{n+1}",
-      start_date: Time.now,
-      end_date: Time.now + 5.days,
+# 各ユーザーに対して投稿を作成
+users.each_with_index do |user, index|
+  Post.create([
+    {
+      user: user,
+      category: categories[index % categories.length],
+      title: "サンプル投稿 #{index + 1}",
+      start_date: Date.today,
+      end_date: Date.today + 5.days,
       recruiting_count: 5,
-      description: "This is a sample post #{i+1} by ユーザー#{n+1}.",
-      status: 'open'
-    )
-  end
+      description: "#{user.name}による投稿。",
+      status: "open"
+    }
+  ])
 end
 
 puts "Seed data created!"
