@@ -26,7 +26,7 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link href="/user_posts/create">
+              <Link href="/user/posts/new">
                 <div className="flex items-center text-white hover:text-blue-400">
                   <FaPlusCircle className="mr-2" />新規募集
                 </div>

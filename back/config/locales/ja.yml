@@ -1,0 +1,6 @@
+ja:
+  flash:
+    posts:
+      create:
+        success: "投稿が正常に作成されました。"
+        failure: "投稿の作成に失敗しました。"
