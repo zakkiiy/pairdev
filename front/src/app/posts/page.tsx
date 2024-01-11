@@ -20,8 +20,10 @@ interface Post {
 }
 
 export default function Posts() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const url = `${apiUrl}/api/v1/posts`
   const { data: session, status } = useSession();
-  const { data: rawPosts, error } = useSWR<Post[]>('/api/v1/posts', fetcherWithAuth); // fetcherWithAuthを使用
+  const { data: rawPosts, error } = useSWR<Post[]>(url, fetcherWithAuth); // fetcherWithAuthを使用
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
 
   if (status === "loading") {
@@ -41,18 +43,20 @@ export default function Posts() {
           <h1 className="text-3xl font-bold text-center py-4 my-6 text-gray-900">募集一覧</h1>
           <div className="grid grid-cols-3 gap-16">
             {posts?.map((post :any) => (
-              <div
-                key={post.id}
-                className="bg-gray-100 p-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
-              >
-                <h2 className="text-xl font-semibold mb-2">タイトル:{post.title}</h2>
-                <div>カテゴリ:{post.categoryName}</div>
-                <div>人数:{post.recruitingCount}</div>
-                <div>ステータス:{post.status}</div>
-                <div>開始予定日:{post.startDate}</div>
-                <div>終了予定日:{post.endDate}</div>
-                <div>募集概要:{post.description}</div>
-              </div>
+              <Link key={post.id} href={`/posts/${post.id}`} passHref >
+                <div
+                  key={post.id}
+                  className="bg-gray-100 p-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                >
+                  <h2 className="text-xl font-semibold mb-2">タイトル:{post.title}</h2>
+                  <div>カテゴリ:{post.categoryName}</div>
+                  <div>人数:{post.recruitingCount}</div>
+                  <div>ステータス:{post.status}</div>
+                  <div>開始予定日:{post.startDate}</div>
+                  <div>終了予定日:{post.endDate}</div>
+                  <div>募集概要:{post.description}</div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
