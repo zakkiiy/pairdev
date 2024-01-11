@@ -6,8 +6,7 @@ const fetcherWithAuth = async (path: string) => {
   const session = await getSession();
   const token = session?.accessToken;
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
-  const url = `${apiUrl}${path}`;
+  const url = path
   return axios.get(url, {
     headers: headers,
     withCredentials: true
@@ -20,5 +19,3 @@ const fetcherWithAuth = async (path: string) => {
 };
 
 export default fetcherWithAuth
-
-

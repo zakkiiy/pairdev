@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from "zod";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import snakecaseKeys from 'snakecase-keys';
 
 interface FormData {
   title: string;
@@ -43,7 +44,8 @@ export default function PostForm() {
   // const [status, setStatus] = useState('');
   // const [category_id, setCategoryName] = useState(1);
 
-  const createPost = async (formData :FormData) => { 
+  const createPost = async (formData :FormData) => {
+    const formDataRecord = { ...formData };
     // フォームのバリデーションなどのロジックをここに追加
     //if (!title || !startDate || !endDate || !description) return;
     const session = await getSession();
@@ -53,15 +55,7 @@ export default function PostForm() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
     const url = `${apiUrl}/api/v1/user_posts`;
     const postData = {
-      post: {
-        title: formData.title,
-        start_date: formData.start_date,
-        end_date: formData.end_date,
-        recruiting_count: formData.recruiting_count,
-        status: formData.status,
-        description: formData.description,
-        category_id: formData.category_id
-      }
+      post: snakecaseKeys(formDataRecord)
     };
 
     try {
@@ -70,7 +64,6 @@ export default function PostForm() {
         withCredentials: true
       });
       toast.success(response.data.message);
-      console.log(response.data);  // 成功した場合の処理
 
     } catch (error: unknown) {
       // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
@@ -78,7 +71,6 @@ export default function PostForm() {
         console.log(error)
         // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
         if (error.response && error.response.data && typeof error.response.data.message === 'string') {
-          console.log(error.response)
           toast.error(error.response.data.message);
         } else {
           // その他のエラーの場合は汎用的なメッセージを表示
