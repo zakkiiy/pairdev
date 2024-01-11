@@ -44,15 +44,13 @@ export default function UserPosts() {
                 key={post.id}
                 className="bg-gray-100 p-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
               >
-                <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-                <p>{post.description}</p>
-                <div>{post.title}</div>
-                <div>{post.startDate}</div>
-                <div>{post.endDate}</div>
-                <div>{post.recruitingCount}</div>
-                <div>{post.status}</div>
-                <div>{post.categoryName}</div>
-                
+                <h2 className="text-xl font-semibold mb-2">タイトル:{post.title}</h2>
+                <div>カテゴリ:{post.categoryName}</div>
+                <div>人数:{post.recruitingCount}</div>
+                <div>ステータス:{post.status}</div>
+                <div>開始予定日:{post.startDate}</div>
+                <div>終了予定日:{post.endDate}</div>
+                <div>募集概要:{post.description}</div>
               </div>
             ))}
           </div>
