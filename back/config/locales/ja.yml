@@ -4,3 +4,10 @@ ja:
       create:
         success: "投稿が正常に作成されました。"
         failure: "投稿の作成に失敗しました。"
+      update:
+        success: "投稿の編集に成功しました。"
+        failure: "投稿の編集に失敗しました。"
+      destroy:
+        success: "投稿の削除に成功しました。"
+        failure: "投稿の削除に失敗しました。"
+

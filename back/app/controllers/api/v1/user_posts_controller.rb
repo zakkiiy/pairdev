@@ -25,6 +25,29 @@ class Api::V1::UserPostsController < ApplicationController
     end
   end
 
+  def update
+    post = @current_user.posts.find_by(id: params[:id])
+
+    if post.update(post_params)
+      success_message = I18n.t('flash.posts.update.success')
+      render json: { status: 'success', message: success_message, data: post }, status: :ok
+    else
+      failure_message = I18n.t('flash.posts.update.failure')
+      render json: { status: 'failure', message: failure_message, data: post }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    post = @current_user.posts.find_by(id: params[:id])
+    if post.destroy
+      success_message = I18n.t('flash.posts.destroy.success')
+      render json: { status: 'success', message: success_message, data: post }, status: :ok
+    else
+      failure_message = I18n.t('flash.posts.destroy.failure')
+      render json: { status: 'failure', message: failure_message, data: post }, status: :unprocessable_entity
+    end
+  end
+
   private
   
   def post_params
