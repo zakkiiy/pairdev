@@ -8,8 +8,10 @@ import camelcaseKeys from "camelcase-keys";
 import Image from 'next/image'
 import Link from 'next/link'
 
+import DeletePostButton from '@/app/components/DeletePostButton';
+
 interface Post {
-  [key: string]: unknown; 
+  [key: string]: unknown;
   id: number,
   title: string,
   startDate: string,
@@ -20,7 +22,7 @@ interface Post {
   categoryName: string
 }
 
-export default function PostDetail() {
+export default function DetailPost() {
   const { data: session, status } = useSession();
   const params = useParams()
   const id = params.id
@@ -29,6 +31,8 @@ export default function PostDetail() {
 
   const { data: rawPost, error } = useSWR<Post>(url, fetcherWithAuth);
   const post = rawPost ? camelcaseKeys(rawPost, {deep:true}) : null;
+
+  
 
   if (status === "loading") {
     return (
@@ -47,12 +51,12 @@ export default function PostDetail() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-        <Link href={`/user/posts/${id}/edit`}>
+       
           <div className="px-4 py-5 sm:px-6">
             <h2 className="text-2xl font-bold text-gray-900">タイトル: {post.title}</h2>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">カテゴリ: {post.categoryName}</p>
           </div>
-        </Link>
+       
         <div className="border-t border-gray-200">
           <dl>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -78,6 +82,12 @@ export default function PostDetail() {
           </dl>
         </div>
       </div>
+      <Link href={`/user/posts/${id}/edit`}>
+        <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+          編集
+        </div>
+      </Link>
+      <DeletePostButton id={post.id} apiUrl={apiUrl} onDeleted={() => console.log("削除されました")} />
     </div>
   );  
 }

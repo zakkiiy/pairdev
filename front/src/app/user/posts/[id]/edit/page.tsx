@@ -1,14 +1,43 @@
-"use client"
-
-import React from 'react';
-import axios from 'axios';
-import { getSession } from 'next-auth/react';
+'use client'
+import fetcherWithAuth from '../../../../utils/fetcher';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image'
+import camelcaseKeys from "camelcase-keys";
+import useSWR from 'swr';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from "zod";
+import { useEffect } from 'react';
+import { getSession } from 'next-auth/react';
+import snakecaseKeys from 'snakecase-keys';
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import snakecaseKeys from 'snakecase-keys';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from "zod";
+
+const postSchema = z.object({
+  title: z.string().min(2, { message: "タイトルは少なくとも5文字以上必要です。" }),
+  start_date: z.string().nonempty({ message: "開始日は必須です。" }),
+  end_date: z.string().nonempty({ message: "終了日は必須です。" }),
+  recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
+  description: z.string().min(10, { message: "少なくとも10文字以上の入力が必要です。" }),
+  status: z.enum(['open', 'closed']).refine(val => ['open', 'closed'].includes(val), { 
+    message: "ステータスは'open'または'closed'である必要があります。" 
+  }),
+  category_id: z.number().nonnegative({ message: "カテゴリーIDは正の数である必要があります。" })
+});
+
+interface Post {
+  [key: string]: unknown; 
+  id: number,
+  title: string,
+  startDate: string,
+  endDate: string,
+  recruitingCount: number,
+  description: string,
+  status: string,
+  categoryName: string
+}
 
 interface FormData {
   title: string;
@@ -20,48 +49,46 @@ interface FormData {
   category_id: number;
 }
 
-const postSchema = z.object({
-  title: z.string().min(5, { message: "タイトルは少なくとも5文字以上〜100文字以内で入力してください。" }),
-  start_date: z.string().nonempty({ message: "開始日は必須です。" }),
-  end_date: z.string().nonempty({ message: "終了日は必須です。" }),
-  recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
-  description: z.string()
-    .min(30, { message: "少なくとも30文字以上の入力が必要です。" })
-    .max(2000, { message: "最大2000文字までです。" }),
-  status: z.enum(['open', 'closed']).refine(val => ['open', 'closed'].includes(val), { 
-    message: "ステータスは'open'または'closed'である必要があります。" 
-  }),
-  category_id: z.number().nonnegative({ message: "カテゴリーIDは正の数である必要があります。" })
-});
+export default function EditPost() {
+  const { data: session, status } = useSession();
+  const params = useParams()
+  const id = params.id
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const url = `${apiUrl}/api/v1/posts/${id}`
+  const { data: rawPost, error } = useSWR<Post>(url, fetcherWithAuth);
+  const post = rawPost ? camelcaseKeys(rawPost, {deep:true}) : null;
 
-export default function PostForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  // データを取得して、初期値をフォームにセット
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(postSchema),
   });
-  // const [title, setTitle] = useState('');
-  // const [startDate, setStartDate] = useState('');
-  // const [endDate, setEndDate] = useState('');
-  // const [recruitingCount, setRecruitingCount] = useState(2);
-  // const [description, setDescription] = useState('');
-  // const [status, setStatus] = useState('');
-  // const [category_id, setCategoryName] = useState(1);
 
-  const createPost = async (formData :FormData) => {
-    const formDataRecord = { ...formData };
-    // フォームのバリデーションなどのロジックをここに追加
-    //if (!title || !startDate || !endDate || !description) return;
+
+  useEffect(() => {
+  if (post) {
+    (Object.keys(post) as Array<keyof Post>).forEach(key => {
+      const value = post[key];
+      if (typeof value === 'string' || typeof value === 'number') {
+        setValue(key as keyof FormData, value);
+      }
+    });
+  }
+}, [post, setValue]);
+
+  const editPost = async (formData :FormData) => {
+    const formDataRecord = {...formData};
     const session = await getSession();
     const token = session?.accessToken;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
-    const url = `${apiUrl}/api/v1/user_posts`;
-    const postData = {
+    const url = `${apiUrl}/api/v1/user_posts/${id}`;
+    const editPostData = {
       post: snakecaseKeys(formDataRecord)
     };
 
     try {
-      const response = await axios.post(url, postData, {
+      const response = await axios.put(url, editPostData, {
         headers: headers,
         withCredentials: true
       });
@@ -76,36 +103,47 @@ export default function PostForm() {
           toast.error(error.response.data.message);
         } else {
           // その他のエラーの場合は汎用的なメッセージを表示
-          toast.error("投稿に問題が発生しました");
+          toast.error("編集に問題が発生しました");
         }
       }
     }
-  };
+  }
+
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Image src="/loading.svg" width={500} height={500} alt="loading..." className="animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
+
+  if (!post) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-3xl font-semibold mb-6 text-center text-gray-800">新しい投稿を作成</h2>
-      <form onSubmit={handleSubmit(createPost)} className="space-y-8">
-      <ToastContainer />
-        
+      <h2 className="text-3xl font-semibold mb-6 text-center text-gray-800">編集</h2>
+      <form onSubmit={handleSubmit(editPost)}>
         {/* タイトルフィールド */}
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">タイトル</label>
           <input
             type="text"
             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("title")}
+            {...register("title")} defaultValue={post.title}
           />
           {errors.title && <p className="text-red-600 text-sm">{errors.title.message}</p>}
         </div>
-        
         {/* 開始日フィールド */}
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">開始日</label>
           <input
             type="datetime-local"
             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("start_date")}
+            {...register("start_date")} defaultValue={post.startDate}
           />
           {errors.start_date && <p className="text-red-600 text-sm">{errors.start_date.message}</p>}
         </div>
@@ -116,7 +154,7 @@ export default function PostForm() {
           <input
             type="datetime-local"
             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("end_date")}
+            {...register("end_date")} defaultValue={post.endDate}
           />
           {errors.end_date && <p className="text-red-600 text-sm">{errors.end_date.message}</p>}
         </div>
@@ -126,7 +164,7 @@ export default function PostForm() {
           <label className="block text-lg font-medium text-gray-700">募集人数</label>
           <select
             className="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("recruiting_count", { valueAsNumber: true })}
+            {...register("recruiting_count", { valueAsNumber: true })} defaultValue={post.recruitingCount}
           >
             {[...Array(19)].map((_, i) => (
               <option key={i + 2} value={i + 2}>
@@ -141,7 +179,7 @@ export default function PostForm() {
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">公開ステータス</label>
           <select className="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("status")}
+            {...register("status")} defaultValue={post.status}
           >
             <option value="open">公開中</option>
             <option value="closed">締め切り</option>
@@ -153,7 +191,7 @@ export default function PostForm() {
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">募集カテゴリ</label>
           <select className="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("category_id", { valueAsNumber: true })}
+            {...register("category_id", { valueAsNumber: true })} defaultValue={post.categoryName}
           >
             <option value={1}>チーム開発</option>
             <option value={2}>ペアプロ</option>
@@ -168,22 +206,22 @@ export default function PostForm() {
           <label className="block text-lg font-medium text-gray-700">募集概要</label>
           <textarea
             className="form-textarea mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            {...register("description")}
+            {...register("description")} defaultValue={post.description}
           ></textarea>
           {errors.description && <p className="text-red-600 text-sm">{errors.description.message}</p>}
         </div>
-        
+
         {/* 送信ボタン */}
         <div className="flex justify-center">
           <button 
             type="submit" 
             className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           >
-            投稿
+            保存
           </button>
         </div>
+        <ToastContainer />
       </form>
     </div>
-  );
-  
+  )
 }
