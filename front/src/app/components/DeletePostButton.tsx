@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation'
 
+
 interface DeletePostButtonProps {
   id: number;
   apiUrl: any;

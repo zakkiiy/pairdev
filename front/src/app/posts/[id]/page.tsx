@@ -7,32 +7,76 @@ import { useSession } from 'next-auth/react';
 import camelcaseKeys from "camelcase-keys";
 import Image from 'next/image'
 import Link from 'next/link'
+import JoinRoomButton from '../../components/JoinRoomButton'
+import ConfirmationModal from '../../components/ConfirmationModal'
+import { useState } from 'react';
+import useJoinRoom from '../../hooks/useJoinRoom';
 
 import DeletePostButton from '@/app/components/DeletePostButton';
+import useRoomStatus from '@/app/hooks/useRoomStatus';
 
-interface Post {
-  [key: string]: unknown;
-  id: number,
-  title: string,
-  startDate: string,
-  endDate: string,
-  recruitingCount: number,
-  description: string,
-  status: string,
-  categoryName: string
+interface PostData {
+  post: {
+    [key: string]: unknown;
+    id: number,
+    title: string,
+    startDate: string,
+    endDate: string,
+    recruitingCount: number,
+    description: string,
+    status: string,
+    categoryName: string
+  };
+  is_poster: boolean;
 }
 
 export default function DetailPost() {
   const { data: session, status } = useSession();
+  console.log(session)
   const params = useParams()
   const id = params.id
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}`
-
-  const { data: rawPost, error } = useSWR<Post>(url, fetcherWithAuth);
-  const post = rawPost ? camelcaseKeys(rawPost, {deep:true}) : null;
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const joinRoom = useJoinRoom(id);
+  const router = useRouter();
 
   
+  // roomのstatuaを取得するフック呼び出し
+  const { roomStatus, isLoading, isError } = useRoomStatus(id);
+  console.log(roomStatus)
+
+  const modalMessage = roomStatus == 'full' ? '満員のため閲覧のみ可能です。' : '参加するとチャットルームに移動します。' 
+
+
+  const { data: rawPost, error } = useSWR<PostData>(url, fetcherWithAuth);
+  console.log(rawPost)
+  const post = rawPost ? camelcaseKeys(rawPost.post, {deep:true}) : null;
+  const isPoster = rawPost ? rawPost.is_poster : false;
+  console.log(isPoster)
+  
+
+  // 参加ボタンをクリックするとモーダルが開く
+  const handleJoinClick = () => {
+    setIsModalOpen(true);
+    
+  };
+
+  // モーダルに対してOKを押すと UserRoom中間テーブル作成しつつroomに飛ばす。
+  const handleConfirmJoin = () => {
+    setIsModalOpen(false);
+    if (roomStatus == 'full') {
+      viewOnlyRoom();
+    } else {
+      joinRoom();
+    }
+  };
+
+  // 閲覧の場合は部屋にroomに飛ばす。
+  const viewOnlyRoom = () => {
+    router.push(`/posts/${id}/room`);
+  }
+
 
   if (status === "loading") {
     return (
@@ -82,12 +126,38 @@ export default function DetailPost() {
           </dl>
         </div>
       </div>
-      <Link href={`/user/posts/${id}/edit`}>
+
+
+       {/* モーダル表示コンポーネント */}
+       <ConfirmationModal 
+        isOpen={isModalOpen}
+        message={modalMessage}
+        onConfirm={handleConfirmJoin}
+        onCancel={ () => setIsModalOpen(false)}
+      />
+
+      
+      {/* 編集・削除ボタン（投稿者のみ表示） */}
+      {isPoster && (
+        <>
+          <Link href={`/user/posts/${id}/edit`}>
+            <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+              編集
+            </div>
+          </Link>
+          <DeletePostButton id={post.id} apiUrl={apiUrl} onDeleted={() => console.log("削除されました")} />
+        </>
+      )}
+      {/* 参加ボタンコンポーネント */}
+      {!isPoster && (
         <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-          編集
-        </div>
-      </Link>
-      <DeletePostButton id={post.id} apiUrl={apiUrl} onDeleted={() => console.log("削除されました")} />
+        <JoinRoomButton 
+          onClick={handleJoinClick}
+          status={roomStatus}  
+        />
+      </div>
+      
+      )}
     </div>
   );  
 }
