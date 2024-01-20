@@ -40,6 +40,7 @@ export default function DetailPost() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const joinRoom = useJoinRoom(id);
   const router = useRouter();
+  
 
   
   // roomのstatuaを取得するフック呼び出し
