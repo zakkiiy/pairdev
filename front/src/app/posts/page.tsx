@@ -1,3 +1,5 @@
+// 一覧
+
 "use client";
 import React, { useState } from "react";
 import { useSession } from 'next-auth/react';
@@ -6,16 +8,20 @@ import useSWR from 'swr';
 import fetcherWithAuth from '../utils/fetcher'
 import Link from 'next/link'
 import camelcaseKeys from "camelcase-keys";
+import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
+import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
+import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
+
 
 interface Post {
   [key: string]: unknown; 
   id: bigint,
   title: string,
-  startDate: Date,
-  endDate: Date,
-  recruitingCount: bigint,
+  startDate: string,
+  endDate: string,
+  recruitingCount: number,
   description: string,
-  status: string,
+  status: 'open' | 'closed',
   categoryName: string
 }
 
@@ -36,25 +42,54 @@ export default function Posts() {
   
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
 
+  const statusColors = {
+    open: 'text-green-400',
+    closed: 'text-red-400',
+    pending: 'text-yellow-400'
+  };
+  
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 bg-gray-50 min-h-screen">
       {status === "authenticated" ? (
         <div>
-          <h1 className="text-3xl font-bold text-center py-4 my-6 text-gray-900">募集一覧</h1>
-          <div className="grid grid-cols-3 gap-16">
-            {posts?.map((post :any) => (
-              <Link key={post.id} href={`/posts/${post.id}`} passHref >
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            募集一覧
+          </span>
+          <div className="grid grid-cols-3 gap-8">
+            {posts?.map((post) => (
+              <Link key={post.id} href={`/posts/${post.id}`} passHref>
                 <div
                   key={post.id}
-                  className="bg-gray-100 p-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                  className="block p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out h-72 overflow-hidden"
                 >
-                  <h2 className="text-xl font-semibold mb-2">タイトル:{post.title}</h2>
-                  <div>カテゴリ:{post.categoryName}</div>
-                  <div>人数:{post.recruitingCount}</div>
-                  <div>ステータス:{post.status}</div>
-                  <div>開始予定日:{post.startDate}</div>
-                  <div>終了予定日:{post.endDate}</div>
-                  <div>募集概要:{post.description}</div>
+                  <h2 className="text-xl font-semibold mb-2 truncate">
+                    <BsCardChecklist className="inline mr-2" />
+                    タイトル: {post.title}
+                  </h2>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaLayerGroup className="inline mr-2" />
+                    カテゴリ: {post.categoryName}
+                  </div>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaUsers className="inline mr-2" />
+                    人数: {post.recruitingCount}
+                  </div>
+                  <div className="mb-2 truncate">
+                    <RiCheckboxBlankCircleFill className={`inline mr-2 ${statusColors[post.status]}`} />
+                    ステータス: {post.status}
+                  </div>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaCalendarAlt className="inline mr-2" />
+                    開始予定日: {post.startDate}
+                  </div>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaCalendarAlt className="inline mr-2" />
+                    終了予定日: {post.endDate}
+                  </div>
+                  <p className="text-gray-600 mt-3 text-sm line-clamp-3">
+                    <BsFillPersonFill className="inline mr-2" />
+                    募集概要: {post.description}
+                  </p>
                 </div>
               </Link>
             ))}
