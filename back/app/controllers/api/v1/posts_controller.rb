@@ -1,6 +1,7 @@
 module Api
   module V1
     class PostsController < ApplicationController
+      before_action :set_current_user
       
       def index
         
@@ -17,12 +18,14 @@ module Api
 
       def show
         post = Post.includes(:category).find(params[:id])
+        is_poster = @current_user.id == post.user_id
         post_with_category_name = post.attributes.merge({ 
           'category_name' => post.category.name,
           'start_date' => post.formatted_start_date,
           'end_date' => post.formatted_end_date,
         })
-        render json: post_with_category_name
+        render json: { post: post_with_category_name, is_poster: is_poster }
+        
       end
     end
   end

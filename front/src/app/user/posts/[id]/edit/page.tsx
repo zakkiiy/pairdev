@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from "zod";
 
+
 const postSchema = z.object({
   title: z.string().min(2, { message: "タイトルは少なくとも5文字以上必要です。" }),
   start_date: z.string().nonempty({ message: "開始日は必須です。" }),
@@ -54,9 +55,10 @@ export default function EditPost() {
   const params = useParams()
   const id = params.id
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const url = `${apiUrl}/api/v1/posts/${id}`
+  const url = `${apiUrl}/api/v1/user_posts/${id}/edit_form`
   const { data: rawPost, error } = useSWR<Post>(url, fetcherWithAuth);
   const post = rawPost ? camelcaseKeys(rawPost, {deep:true}) : null;
+  const router = useRouter();
 
   // データを取得して、初期値をフォームにセット
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
@@ -76,6 +78,7 @@ export default function EditPost() {
 }, [post, setValue]);
 
   const editPost = async (formData :FormData) => {
+    
     const formDataRecord = {...formData};
     const session = await getSession();
     const token = session?.accessToken;
@@ -92,7 +95,13 @@ export default function EditPost() {
         headers: headers,
         withCredentials: true
       });
-      toast.success(response.data.message);
+      
+      router.push(`/posts/${id}`);
+      setTimeout(() => {
+        // 少し遅延させる 
+        toast.success(response.data.message);
+      }, 500);
+
 
     } catch (error: unknown) {
       // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック

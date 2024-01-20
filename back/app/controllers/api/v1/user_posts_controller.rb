@@ -17,6 +17,7 @@ class Api::V1::UserPostsController < ApplicationController
     post = @current_user.posts.new(post_params)
 
     if post.save
+      @room = post.create_room
       success_message = I18n.t('flash.posts.create.success')
       render json: { status: 'success', message: success_message, data: post }, status: :created
     else
@@ -25,7 +26,18 @@ class Api::V1::UserPostsController < ApplicationController
     end
   end
 
+  def edit_form
+    post = Post.includes(:category).find(params[:id])
+    post_with_category_name = post.attributes.merge({ 
+      'category_name' => post.category.name,
+      'start_date' => post.formatted_start_date,
+      'end_date' => post.formatted_end_date,
+    })
+    render json: post_with_category_name
+  end
+
   def update
+    p params
     post = @current_user.posts.find_by(id: params[:id])
 
     if post.update(post_params)
