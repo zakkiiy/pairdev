@@ -1,4 +1,11 @@
-const JoinRoomButton = ({  onClick, status }) => {
+type RoomStatus = 'full' | 'open' | 'closed テスト';
+
+interface JoinRoomButtonProps {
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  status: RoomStatus;
+}
+
+const JoinRoomButton: React.FC<JoinRoomButtonProps> = ({  onClick, status  }) => {
   return (
     <button
       onClick={onClick}
