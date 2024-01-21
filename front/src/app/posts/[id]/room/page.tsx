@@ -6,6 +6,7 @@ import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import camelcaseKeys from "camelcase-keys";
 import Image from 'next/image'
+import RoomMessages from '../../../components/RoomMessages'
 
 const Room = () => {
   const { data: session, status } = useSession();
@@ -14,9 +15,11 @@ const Room = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}/room`
 
-  const { data: rawRoom, error } = useSWR(url, fetcherWithAuth);
-  console.log(rawRoom)
-  const room = rawRoom ? camelcaseKeys(rawRoom, {deep:true}) : null;
+  const { data: rawResponse, error } = useSWR(url, fetcherWithAuth);
+  const responce = rawResponse ? camelcaseKeys(rawResponse, {deep:true}) : null;
+  
+  const post = responce?.post 
+  const room = responce?.room
 
   if (status === "loading") {
     return (
@@ -35,12 +38,14 @@ const Room = () => {
   const roomTitle = room?.post?.title || 'タイトル未設定';
 
   return (
-    <>
-      <p>{room?.post?.title}</p>
-      <p>{room?.post?.recruitingCount}</p>
-    </>
-  )
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold">{post?.title}</h1>
+      <p className="text-md">Recruiting: {post?.recruitingCount}</p>
+      <RoomMessages roomId={room.id} />
+    </div>
+  );
 
 }
 
 export default Room;
+

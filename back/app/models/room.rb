@@ -2,6 +2,7 @@ class Room < ApplicationRecord
   enum status: { open: 0, full: 1 } # 0参加, 1満員
   belongs_to :post
   has_many :room_users, dependent: :destroy
+  has_many :messages
 
   after_create :add_creator_to_room_users
 
