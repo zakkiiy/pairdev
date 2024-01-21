@@ -48,7 +48,7 @@ const handler = NextAuth({
 			}
 			return token;
 		},
-		async session({ session, token, user }) {
+		async session({ session, token }) {
 			if (token.accessToken && token.id) {
 				session.accessToken = token.accessToken as string;
 				session.user = token.id

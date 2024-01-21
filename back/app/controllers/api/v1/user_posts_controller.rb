@@ -21,6 +21,8 @@ class Api::V1::UserPostsController < ApplicationController
       success_message = I18n.t('flash.posts.create.success')
       render json: { status: 'success', message: success_message, data: post }, status: :created
     else
+      puts post.errors.full_messages
+      Rails.logger.info("バリデーションエラー: #{post.errors.full_messages.join(", ")}")
       failure_message = I18n.t('flash.posts.create.failure')
       render json: { status: 'failure', message: failure_message, data: post }, status: :unprocessable_entity
     end
