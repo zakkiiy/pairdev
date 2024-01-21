@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import camelcaseKeys from "camelcase-keys";
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+import useCreateMessage from '../hooks/useCreateMessage';
 
 interface RoomMessagesProps {
   roomId: string;
@@ -25,6 +26,9 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  // メッセージ送信用hooks
+  const createMessage = useCreateMessage(roomId);
+  const [messageText, setMessageText] = useState("");
 
   const { data: rawMessages, error } = useSWR(initialMessagesUrl, fetcherWithAuth, {
     onSuccess: (data) => {
@@ -38,6 +42,13 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
       const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
       const atBottom = scrollTop + clientHeight === scrollHeight;
       setIsAtBottom(atBottom);
+    }
+  };
+
+  const handleSend = () => {
+    if (messageText.trim()) {
+      createMessage(messageText);
+      setMessageText(""); // メッセージ送信後、入力フィールドをクリア
     }
   };
 
@@ -91,9 +102,12 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
             type="text"
             className="flex-1 p-2 border rounded-lg"
             placeholder="Type a message..."
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
           />
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            onClick={handleSend}
           >
             Send
           </button>
