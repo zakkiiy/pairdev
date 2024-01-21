@@ -25,7 +25,7 @@ export default function UserPosts() {
   const url = `${apiUrl}/api/v1/user_posts`
   const { data: session, status } = useSession();
   const { data: rawPosts, error } = useSWR(url, fetcherWithAuth); // fetcherWithAuthを使用
-  const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
+  const posts = rawPosts ? camelcaseKeys(rawPosts, { deep: true }) : null;
 
   if (status === "loading") {
     return (
