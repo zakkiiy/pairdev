@@ -8,6 +8,7 @@ declare module "next-auth" {
    */
   interface Session {
     accessToken?: string;
+		user?: User;
   }
 
   /**
@@ -30,7 +31,7 @@ const handler = NextAuth({
           id: profile.id,
           name: profile.name || profile.login,
           email: profile.email,
-          image: profile.avatar_url, // avatar_urlをimageプロパティにマッピング
+          image: profile.avatar_url,
         };
       },
 		}),
@@ -51,7 +52,7 @@ const handler = NextAuth({
 		async session({ session, token }) {
 			if (token.accessToken && token.id) {
 				session.accessToken = token.accessToken as string;
-				session.user = token.id
+				session.user = { ...session.user, id: String(token.id) };
 			}
 			return session;
 		},
