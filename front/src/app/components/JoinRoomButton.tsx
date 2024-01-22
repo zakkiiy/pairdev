@@ -9,7 +9,11 @@ const JoinRoomButton: React.FC<JoinRoomButtonProps> = ({  onClick, status  }) =>
   return (
     <button
       onClick={onClick}
-      className={status === 'full' ? 'bg-gray-500' : 'bg-blue-600 hover:bg-blue-700'}
+      className={
+        status === 'full'
+          ? 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded'
+          : 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
+      }
       
     >
       {status == 'full' ? '閲覧' : '参加'}

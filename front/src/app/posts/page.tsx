@@ -1,5 +1,3 @@
-// 一覧
-
 "use client";
 import React, { useState } from "react";
 import { useSession } from 'next-auth/react';
