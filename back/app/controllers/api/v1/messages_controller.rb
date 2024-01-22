@@ -4,19 +4,27 @@ class Api::V1::MessagesController < ApplicationController
   def index
     room = Room.find(params[:room_id])
     messages = room.messages.includes(:user).order(created_at: :desc)
-    render json: messages.as_json(include: { user: { only: [:id, :name, :uid] } })
+    render json: messages.as_json(include: { user: { only: [:id, :name, :uid, :avatar_url] } })
   end
 
   def create
-    p params
-    p "あいうえお"
     room = Room.find(params[:room_id])
     message = @current_user.messages.new(message_params.merge(room: room))
-    
+
     if message.save
-      p "成功"
+      render json: { message: 'メッセージが作成されました。' }, status: :ok
     else
-      p "失敗"
+      render json: { errors: message.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    message = @current_user.messages.find_by(id: params[:id])
+    
+    if message.destroy
+      render json: { message: 'メッセージが削除されました。' }, status: :ok
+    else
+      render json: { error: 'メッセージの削除に失敗しました。' }, status: :unprocessable_entity
     end
   end
 
