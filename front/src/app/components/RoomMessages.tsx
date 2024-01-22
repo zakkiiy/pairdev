@@ -80,9 +80,9 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
 
   return (
-    <div className="flex flex-col h-auto max-h-[65vh] mx-auto mt-4 mb-4 p-4 bg-gray-200 rounded-lg">
+    <div className="flex flex-col h-auto min-h-[65vh] max-h-[65vh] mx-auto mt-4 mb-4 p-4 bg-gray-200 rounded-lg overflow-auto">
       {/* メッセージ表示部分 */}
-      <div className="flex flex-col space-y-2 overflow-auto" ref={messagesContainerRef}>
+      <div className="flex flex-col space-y-2 overflow-auto flex-grow" ref={messagesContainerRef}>
         {messages.map((message) => (
           <div
             key={message.id}
@@ -97,22 +97,22 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   
       {/* ボタンと入力フィールド */}
       <div className="mt-4">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            className="flex-1 p-2 border rounded-lg"
-            placeholder="Type a message..."
-            value={messageText}
-            onChange={(e) => setMessageText(e.target.value)}
-          />
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-            onClick={handleSend}
-          >
-            Send
-          </button>
-        </div>
-      </div>
+    <div className="flex items-center space-x-2">
+      <input
+        type="text"
+        className="flex-1 p-2 border rounded-lg"
+        placeholder="Type a message..."
+        value={messageText}
+        onChange={(e) => setMessageText(e.target.value)}
+      />
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        onClick={handleSend}
+      >
+        Send
+      </button>
+    </div>
+  </div>
     </div>
   );
 }
