@@ -40,7 +40,7 @@ const DeletePostButton = ({ id, apiUrl, onDeleted }:DeletePostButtonProps ) => {
     <div>
       <button
         onClick={handleDelete}
-        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="ml-2 inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
       >
         削除
       </button>

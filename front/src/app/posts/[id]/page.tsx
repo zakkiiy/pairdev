@@ -15,6 +15,7 @@ import useJoinRoom from '../../hooks/useJoinRoom';
 import DeletePostButton from '@/app/components/DeletePostButton';
 import useRoomStatus from '@/app/hooks/useRoomStatus';
 
+
 interface PostData {
   post: {
     [key: string]: unknown;
@@ -96,69 +97,77 @@ export default function DetailPost() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-       
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-2xl font-bold text-gray-900">タイトル: {post.title}</h2>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">カテゴリ: {post.categoryName}</p>
-          </div>
-       
+        <div className="flex justify-between items-center px-4 py-5 sm:px-6">
+          <h2 className="text-2xl font-bold text-gray-900">タイトル: {post.title}</h2>
+          {/* 編集・削除ボタン（投稿者のみ表示） */}
+          {isPoster && (
+            <div className="flex">
+              <Link href={`/user/posts/${id}/edit`}>
+                <div className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100">
+                  編集
+                </div>
+              </Link>
+              <DeletePostButton id={post.id} apiUrl={apiUrl} onDeleted={() => console.log("削除されました")} />
+            </div>
+          )}
+          {/* 参加ボタンコンポーネント */}
+          {!isPoster && (
+            <div className="flex">
+              
+                <JoinRoomButton 
+                  onClick={handleJoinClick}
+                  status={roomStatus}  
+                />
+              
+            </div>
+          )}
+        </div>
+  
+        <div className="px-4 py-5 sm:px-6">
+          <p className="mt-1 max-w-2xl text-sm text-gray-500">カテゴリ: {post.categoryName}</p>
+        </div>
+  
         <div className="border-t border-gray-200">
           <dl>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">人数</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{post.recruitingCount}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.recruitingCount}</dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">ステータス</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{post.status}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.status}</dd>
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">開始予定日</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{post.startDate}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.startDate}</dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">終了予定日</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{post.endDate}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.endDate}</dd>
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">募集概要</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{post.description}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.description}</dd>
             </div>
           </dl>
         </div>
-      </div>
-
-
-       {/* モーダル表示コンポーネント */}
-       <ConfirmationModal 
-        isOpen={isModalOpen}
-        message={modalMessage}
-        onConfirm={handleConfirmJoin}
-        onCancel={ () => setIsModalOpen(false)}
-      />
-
-      
-      {/* 編集・削除ボタン（投稿者のみ表示） */}
-      {isPoster && (
-        <>
-          <Link href={`/user/posts/${id}/edit`}>
-            <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-              編集
-            </div>
+  
+        <div className="px-4 py-4 sm:px-6">
+          <Link href={`/posts/${id}/room`}>
+            <div className="text-indigo-600 hover:text-indigo-900">詳細を見る</div>
           </Link>
-          <DeletePostButton id={post.id} apiUrl={apiUrl} onDeleted={() => console.log("削除されました")} />
-        </>
-      )}
-      {/* 参加ボタンコンポーネント */}
-      {!isPoster && (
-        <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-        <JoinRoomButton 
-          onClick={handleJoinClick}
-          status={roomStatus}  
+        </div>
+  
+        {/* モーダル表示コンポーネント */}
+        <ConfirmationModal 
+          isOpen={isModalOpen}
+          message={modalMessage}
+          onConfirm={handleConfirmJoin}
+          onCancel={() => setIsModalOpen(false)}
         />
+  
+        
       </div>
-      
-      )}
     </div>
-  );  
+  );
 }
