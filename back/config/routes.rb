@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
   post 'auth/:provider/callback', to: 'api/v1/users#create'
   namespace :api do
     namespace :v1 do

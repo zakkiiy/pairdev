@@ -8,10 +8,24 @@ class Api::V1::MessagesController < ApplicationController
   end
 
   def create
+    
     room = Room.find(params[:room_id])
     message = @current_user.messages.new(message_params.merge(room: room))
 
     if message.save
+      ActionCable.server.broadcast "chat_channel_#{message.room_id}", {
+        message: {
+          id: message.id,
+          content: message.content,
+          user: {
+            id: message.user.id,
+            name: message.user.name,
+            uid: message.user.uid,
+            avatar_url: message.user.avatar_url
+          }
+        }
+      }
+      
       render json: { message: 'メッセージが作成されました。' }, status: :ok
     else
       render json: { errors: message.errors.full_messages }, status: :unprocessable_entity
