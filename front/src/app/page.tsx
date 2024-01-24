@@ -5,7 +5,7 @@ export default function Home() {
   return (
       <main>
         <section className="text-center p-10 bg-gradient-to-r from-gray-700 to-gray-900 text-white">
-          <h1 className="text-3xl font-bold">チーム開発を、もっと身近に。</h1>
+          <h1 className="text-3xl font-bold">チーム開発を、もっと身近に。テスト</h1>
           <p className="text-xl mt-4">
             PairDevはあなたのチーム開発をサポートするプラットフォームです。
           </p>
