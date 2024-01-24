@@ -59,6 +59,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
     return () => {
       subscription.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId]);
 
   // メッセージの取得
