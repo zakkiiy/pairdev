@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ActionCable from 'actioncable';
 
 interface RoomMessagesProps {
   roomId: string;
@@ -39,6 +40,28 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   const createMessage = useCreateMessage(roomId);
   const [messageText, setMessageText] = useState("");
 
+
+  useEffect(() => {
+    const cable = ActionCable.createConsumer('ws://localhost:3001/cable');
+    console.log(cable)
+    const subscription = cable.subscriptions.create(
+      { channel: 'ChatChannel', room_id: roomId },
+      {
+        received(data) {
+          console.log("受信したデータ:", data);
+          const { message } = data;
+          setMessages(prev => [...prev, message]) 
+        }
+      }
+    );
+  
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [roomId]);
+
+  // メッセージの取得
+  // useStateのmessageの値を更新
   const { data: rawMessages, error } = useSWR(initialMessagesUrl, fetcherWithAuth, {
     onSuccess: (data) => {
       const reversedData = camelcaseKeys(data, { deep: true }).reverse();
@@ -46,14 +69,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
     }
   });
 
-  const handleScroll = () => {
-    if (messagesContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
-      const atBottom = scrollTop + clientHeight === scrollHeight;
-      setIsAtBottom(atBottom);
-    }
-  };
-
+  // メッセージ送信用関数とhook
   const handleSend = () => {
     if (messageText.trim()) {
       createMessage(messageText);
@@ -78,6 +94,18 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
     }
   }
 
+  // スクロールが最下部かどうかの判断
+  // 違う場合はfalse
+  const handleScroll = () => {
+    if (messagesContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+      const atBottom = scrollTop + clientHeight === scrollHeight;
+      setIsAtBottom(atBottom);
+    }
+  };
+
+  // refで指定した要素内をスクロールするたびにhandleScrollを呼び出す。（イベントリスナー登録）
+  // アンマウント時にイベントリスナーを削除。
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (container) {
@@ -86,6 +114,8 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
     }
   }, []);
 
+  // スクロールが最下部の場合 && メッセージが追加された場合に、自動的に最下部にスクロールする。
+  // そうでない場合は、スクロールしない。
   useEffect(() => {
     if (isAtBottom) {
       const container = messagesContainerRef.current;
@@ -110,7 +140,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
       {/* メッセージ表示部分 */}
       <div className="flex flex-col space-y-2 overflow-auto flex-grow" ref={messagesContainerRef}>
         {messages.map((message) => {
-          const isSender = message.user.uid === userId;
+          const isSender = message.user?.uid === userId;
           return (
             <div
               key={message.id}
@@ -119,7 +149,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
             >
               <div className="flex items-center">
                 {/* アバター画像 */}
-                <Image src={message.user.avatar_url} alt="avatar" />
+                {/* <Image src={message.user?.avatar_url} alt="avatar" /> */}
                 <p className="text-sm font-medium">{message.user?.name}</p>
               </div>
               <p className="text-sm" style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>
