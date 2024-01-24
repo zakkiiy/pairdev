@@ -39,10 +39,11 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   // メッセージ送信用hooks
   const createMessage = useCreateMessage(roomId);
   const [messageText, setMessageText] = useState("");
+  const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET
 
 
   useEffect(() => {
-    const cable = ActionCable.createConsumer('ws://localhost:3001/cable');
+    const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
     console.log(cable)
     const subscription = cable.subscriptions.create(
       { channel: 'ChatChannel', room_id: roomId },
