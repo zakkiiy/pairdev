@@ -39,8 +39,9 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [ 'https://pairdev.vercel.app', 'https://pairdev.vercel.app/', 'http://pairdev.vercel.app', 'http://pairdev.vercel.app/' ]
   config.action_cable.disable_request_forgery_protection = true
 
+
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = false
+  config.force_ssl = true
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
