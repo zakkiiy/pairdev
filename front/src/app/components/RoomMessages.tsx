@@ -39,17 +39,16 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   // メッセージ送信用hooks
   const createMessage = useCreateMessage(roomId);
   const [messageText, setMessageText] = useState("");
-  const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET
+  //const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET
 
 
   useEffect(() => {
-    const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
-    console.log(cable)
+    //const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
+    const cable = ActionCable.createConsumer('wss://pairdev.onrender.com/cable');
     const subscription = cable.subscriptions.create(
       { channel: 'ChatChannel', room_id: roomId },
       {
         received(data) {
-          console.log("受信したデータ:", data);
           const { message } = data;
           setMessages(prev => [...prev, message]) 
         }
