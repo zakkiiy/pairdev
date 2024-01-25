@@ -5,6 +5,14 @@ require 'json'
 class ApplicationController < ActionController::API
   include ActionController::Cookies
 
+  def handle_options_request  
+    response.headers['Access-Control-Allow-Origin'] = '*'  
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST' 
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+  
+    head :ok 
+  end
+
   private
 
   def set_current_user
