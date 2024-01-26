@@ -5,9 +5,10 @@ module Api
       
       def index
         
-        posts = Post.includes(:category).order(created_at: :desc).all
+        posts = Post.includes(:category, :tags).order(created_at: :desc).all
         posts_with_category_names = posts.map do |post|
-          post.attributes.merge({ 
+          post.attributes.merge({
+            'tags' => post.tags.map(&:name),
             'category_name' => post.category.name,
             'start_date' => post.formatted_start_date,
             'end_date' => post.formatted_end_date,
@@ -17,9 +18,10 @@ module Api
       end
 
       def show
-        post = Post.includes(:category).find(params[:id])
+        post = Post.includes(:category, :tags).find(params[:id])
         is_poster = @current_user.id == post.user_id
         post_with_category_name = post.attributes.merge({ 
+          'tags' => post.tags.map(&:name),
           'category_name' => post.category.name,
           'start_date' => post.formatted_start_date,
           'end_date' => post.formatted_end_date,
