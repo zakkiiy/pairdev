@@ -2,6 +2,8 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :category
   has_one :room, dependent: :destroy
+  has_many :post_tags
+  has_many :tags, through: :post_tags
 
   validates :category_id, presence: true
   validates :title, presence: true, length: { minimum: 5, maximum: 100 }
