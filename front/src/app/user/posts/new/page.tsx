@@ -1,6 +1,3 @@
-// メモ
-//new
-
 "use client"
 
 import React from 'react';
@@ -17,19 +14,25 @@ import { MdOutlinePublic, MdOutlineLock } from 'react-icons/md';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
+import useTags from  '../../../hooks/useTags'
 
 interface FormData {
   title: string;
   start_date: string;
   end_date: string;
   recruiting_count: number;
-  status: 'open' | 'closed'; // 'open' または 'closed' のみを受け入れる
+  status: 'open' | 'closed';
+  tags: string
   description: string;
   category_id: number;
 }
 
 const postSchema = z.object({
   title: z.string().min(5, { message: "タイトルは少なくとも5文字以上〜100文字以内で入力してください。" }),
+  tags: z.string()
+    .nonempty({ message: "タグは少なくとも一つ入力してください。" })
+    .max(200, { message: "タグは最大200文字までです。" })
+    .regex(/^[\w\-\s,]+$/, { message: "タグは英数字、ハイフン、スペース、カンマのみ使用できます。" }),
   start_date: z.string().nonempty({ message: "開始日は必須です。" }),
   end_date: z.string().nonempty({ message: "終了日は必須です。" }),
   recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
@@ -46,13 +49,6 @@ export default function PostForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(postSchema),
   });
-  // const [title, setTitle] = useState('');
-  // const [startDate, setStartDate] = useState('');
-  // const [endDate, setEndDate] = useState('');
-  // const [recruitingCount, setRecruitingCount] = useState(2);
-  // const [description, setDescription] = useState('');
-  // const [status, setStatus] = useState('');
-  // const [category_id, setCategoryName] = useState(1);
 
   const createPost = async (formData :FormData) => {
     const formDataRecord = { ...formData };
@@ -65,7 +61,10 @@ export default function PostForm() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
     const url = `${apiUrl}/api/v1/user_posts`;
     const postData = {
-      post: snakecaseKeys(formDataRecord)
+      post: {
+        ...snakecaseKeys(formDataRecord),
+        tags: formDataRecord.tags,
+      }
     };
 
     try {
@@ -113,6 +112,21 @@ export default function PostForm() {
               {...register("title")}
             />
             {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+          </div>
+
+          {/* 技術スタック */}
+          <div className="mb-5">
+            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+              <BsPencilSquare className="mr-2" />
+              使用予定技術
+            </label>
+            <input
+              type="text"
+              className="form-input w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
+              placeholder="Rails, Ruby, Docker, カンマ区切りで入力"
+              {...register("tags")}
+            />
+            {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>}
           </div>
 
           {/* 開始日フィールド */}

@@ -14,9 +14,15 @@ class Api::V1::UserPostsController < ApplicationController
   end
 
   def create
-    post = @current_user.posts.new(post_params)
+    post = @current_user.posts.new(post_params.except(:tags))
+    tags = params[:post][:tags].split(',')
 
     if post.save
+      tags.each do |tag_name|
+        tag = Tag.find_or_create_by(name: tag_name.strip)
+        post.tags << tag
+      end
+
       @room = post.create_room
       success_message = I18n.t('flash.posts.create.success')
       render json: { status: 'success', message: success_message, data: post }, status: :created
@@ -65,6 +71,6 @@ class Api::V1::UserPostsController < ApplicationController
   private
   
   def post_params
-    params.require(:post).permit(:title, :description, :start_date, :end_date, :recruiting_count, :status, :category_id)
+    params.require(:post).permit(:title, :description, :start_date, :end_date, :recruiting_count, :status, :category_id, :tags)
   end
 end
