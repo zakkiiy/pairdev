@@ -14,7 +14,7 @@ import { MdOutlinePublic, MdOutlineLock } from 'react-icons/md';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
-// import useTags from 
+import useTags from  '../../../hooks/useTags'
 
 interface FormData {
   title: string;

@@ -19,7 +19,7 @@ class Api::V1::UserPostsController < ApplicationController
 
     if post.save
       tags.each do |tag_name|
-        tag = Tag.find_by(name: tag_name.strip)
+        tag = Tag.find_or_create_by(name: tag_name.strip)
         post.tags << tag
       end
 
