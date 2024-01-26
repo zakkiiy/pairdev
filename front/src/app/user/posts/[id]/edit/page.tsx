@@ -6,7 +6,7 @@ import Image from 'next/image'
 import camelcaseKeys from "camelcase-keys";
 import useSWR from 'swr';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getSession } from 'next-auth/react';
 import snakecaseKeys from 'snakecase-keys';
 import axios from 'axios';
@@ -18,6 +18,10 @@ import * as z from "zod";
 
 const postSchema = z.object({
   title: z.string().min(2, { message: "タイトルは少なくとも5文字以上必要です。" }),
+  tags: z.string()
+    .nonempty({ message: "タグは少なくとも一つ入力してください。" })
+    .max(200, { message: "タグは最大200文字までです。" })
+    .regex(/^[\w\-\s,]+$/, { message: "タグは英数字、ハイフン、スペース、カンマのみ使用できます。" }),
   start_date: z.string().nonempty({ message: "開始日は必須です。" }),
   end_date: z.string().nonempty({ message: "終了日は必須です。" }),
   recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
@@ -31,6 +35,7 @@ const postSchema = z.object({
 interface Post {
   [key: string]: unknown; 
   id: number,
+  tags: [],
   title: string,
   startDate: string,
   endDate: string,
@@ -46,6 +51,7 @@ interface FormData {
   end_date: string;
   recruiting_count: number;
   status: 'open' | 'closed'; // 'open' または 'closed' のみを受け入れる
+  tags: [];
   description: string;
   category_id: number;
 }
@@ -59,6 +65,7 @@ export default function EditPost() {
   const { data: rawPost, error } = useSWR<Post>(url, fetcherWithAuth);
   const post = rawPost ? camelcaseKeys(rawPost, {deep:true}) : null;
   const router = useRouter();
+  
 
   // データを取得して、初期値をフォームにセット
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
@@ -87,8 +94,12 @@ export default function EditPost() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
     const url = `${apiUrl}/api/v1/user_posts/${id}`;
     const editPostData = {
-      post: snakecaseKeys(formDataRecord)
+      post: {
+        ...snakecaseKeys(formDataRecord),
+        tags: formDataRecord.tags,
+      }
     };
+    console.log(editPostData)
 
     try {
       const response = await axios.put(url, editPostData, {
@@ -98,7 +109,6 @@ export default function EditPost() {
       
       router.push(`/posts/${id}`);
       setTimeout(() => {
-        // 少し遅延させる 
         toast.success(response.data.message);
       }, 500);
 
@@ -146,6 +156,18 @@ export default function EditPost() {
           />
           {errors.title && <p className="text-red-600 text-sm">{errors.title.message}</p>}
         </div>
+
+        {/* 技術スタック */}
+        <div className="space-y-2">
+          <label className="block text-lg font-medium text-gray-700">使用予定技術</label>
+          <input
+            type="text"
+            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            {...register("tags")} defaultValue={post.tags.join(', ')}
+          />
+          {errors.tags && <p className="text-red-600 text-sm">{errors.tags.message}</p>}
+        </div>
+
         {/* 開始日フィールド */}
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">開始日</label>

@@ -14,12 +14,17 @@ import useJoinRoom from '../../hooks/useJoinRoom';
 
 import DeletePostButton from '@/app/components/DeletePostButton';
 import useRoomStatus from '@/app/hooks/useRoomStatus';
+import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
+import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
+import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
+import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
 
 
 interface PostData {
   post: {
     [key: string]: unknown;
     id: number,
+    tags: [],
     title: string,
     startDate: string,
     endDate: string,
@@ -124,11 +129,16 @@ export default function DetailPost() {
         </div>
   
         <div className="px-4 py-5 sm:px-6">
-          <p className="mt-1 max-w-2xl text-sm text-gray-500">カテゴリ: {post.categoryName}</p>
+          <FaLayerGroup className="inline mr-2" />
+          カテゴリ: {post.categoryName}
         </div>
   
         <div className="border-t border-gray-200">
           <dl>
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">使用予定技術</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.tags.join(', ')}</dd>
+            </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">人数</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.recruitingCount}</dd>

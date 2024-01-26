@@ -9,11 +9,13 @@ import camelcaseKeys from "camelcase-keys";
 import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
 import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
+import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 
 
 interface Post {
   [key: string]: unknown; 
   id: bigint,
+  tags: [],
   title: string,
   startDate: string,
   endDate: string,
@@ -67,6 +69,10 @@ export default function Posts() {
                   <div className="text-gray-700 mb-2 truncate">
                     <FaLayerGroup className="inline mr-2" />
                     カテゴリ: {post.categoryName}
+                  </div>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaCode className="inline mr-2" />
+                    使用予定技術: {post.tags.join(', ')}
                   </div>
                   <div className="text-gray-700 mb-2 truncate">
                     <FaUsers className="inline mr-2" />

@@ -22,7 +22,7 @@ interface FormData {
   end_date: string;
   recruiting_count: number;
   status: 'open' | 'closed';
-  tags: string
+  tags: [];
   description: string;
   category_id: number;
 }

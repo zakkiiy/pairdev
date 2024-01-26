@@ -10,11 +10,13 @@ import Link from 'next/link';
 import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
 import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
+import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 
 interface Post {
   [key: string]: unknown; 
   id: bigint,
   title: string,
+  tags: [],
   startDate: string,
   endDate: string,
   recruitingCount: number,
@@ -35,6 +37,7 @@ export default function UserPosts() {
   const { data: session, status } = useSession();
   const { data: rawPosts, error } = useSWR<Post[]>(url, fetcherWithAuth); 
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
+  
 
   if (status === "loading") {
     return (
@@ -67,6 +70,10 @@ export default function UserPosts() {
                   <div className="text-gray-700 mb-2 truncate">
                     <FaLayerGroup className="inline mr-2" />
                     カテゴリ: {post.categoryName}
+                  </div>
+                  <div className="text-gray-700 mb-2 truncate">
+                    <FaCode className="inline mr-2" />
+                    使用予定技術: {post.tags.join(', ')}
                   </div>
                   <div className="text-gray-700 mb-2 truncate">
                     <FaUsers className="inline mr-2" />
