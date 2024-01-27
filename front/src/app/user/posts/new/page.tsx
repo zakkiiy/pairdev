@@ -1,8 +1,9 @@
 "use client"
 
-import React from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from "zod";
@@ -49,9 +50,13 @@ export default function PostForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(postSchema),
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const createPost = async (formData :FormData) => {
     const formDataRecord = { ...formData };
+    setIsLoading(true);
+    
     // フォームのバリデーションなどのロジックをここに追加
     //if (!title || !startDate || !endDate || !description) return;
     const session = await getSession();
@@ -73,9 +78,14 @@ export default function PostForm() {
         withCredentials: true
       });
       toast.success(response.data.message);
+      setTimeout(() => {
+        router.push(`/posts/${response.data.data.id}/room`);
+        setIsLoading(false);
+      }, 5000);
 
     } catch (error: unknown) {
       // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
+      setIsLoading(false); // ローディング終了
       if (axios.isAxiosError(error)) {
         console.log(error)
         // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
@@ -91,6 +101,14 @@ export default function PostForm() {
 
   return (
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-blue-100">
+       {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+          <h2 className="mt-5 text-2xl text-white blink">
+            チャットルームを作成中です...
+          </h2>
+        </div>
+      )}
       <div className="max-w-3xl mx-auto bg-white p-8 shadow-2xl rounded-xl">
         <h2 className="text-4xl font-bold mb-10 text-center text-gray-800 flex justify-center items-center">
           <AiOutlineTeam className="mr-2" />

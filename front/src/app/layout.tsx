@@ -4,6 +4,8 @@ import './globals.css'
 import NextAuthProvider from '@/providers/NextAuth';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { Poppins } from "next/font/google";
+const HachiMaruPopFont = Poppins({ weight: "500", subsets: ["latin"] });
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <body className={`${HachiMaruPopFont.className} flex flex-col min-h-screen`}>
         <NextAuthProvider>
           <Header />
             <main className="flex-1">
