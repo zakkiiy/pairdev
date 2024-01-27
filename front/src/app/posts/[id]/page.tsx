@@ -51,9 +51,8 @@ export default function DetailPost() {
   
   // roomのstatuaを取得するフック呼び出し
   const { roomStatus, isLoading, isError } = useRoomStatus(id);
-  console.log(roomStatus)
-
-  const modalMessage = roomStatus == 'full' ? '満員のため閲覧のみ可能です。' : '参加するとチャットルームに移動します。' 
+  const roomStatusView = 'roomView';
+  const [modalMessage, setModalMessage] = useState('');
 
 
   const { data: rawPost, error } = useSWR<PostData>(url, fetcherWithAuth);
@@ -62,18 +61,24 @@ export default function DetailPost() {
   const isPoster = rawPost ? rawPost.is_poster : false;
   console.log(isPoster)
   
+  // 閲覧ボタンを押すとモーダル開く
+  const handleViewClick = () => {
+    setModalMessage("この部屋は閲覧のみ可能です。");
+    setIsModalOpen(true);
+  }
 
   // 参加ボタンをクリックするとモーダルが開く
   const handleJoinClick = () => {
+    setModalMessage(roomStatus == 'full' ? '満員です。' : '参加するとチャットルームに移動します。');
     setIsModalOpen(true);
-    
   };
 
   // モーダルに対してOKを押すと UserRoom中間テーブル作成しつつroomに飛ばす。
   const handleConfirmJoin = () => {
-    setIsModalOpen(false);
+    console.log("ルーム状態")
+    console.log(roomStatus)
     if (roomStatus == 'full') {
-      viewOnlyRoom();
+      setIsModalOpen(false);
     } else {
       joinRoom();
     }
@@ -117,14 +122,22 @@ export default function DetailPost() {
           )}
           {/* 参加ボタンコンポーネント */}
           {!isPoster && (
-            <div className="flex">
-              
+            <div>
+              <div className="flex">              
                 <JoinRoomButton 
                   onClick={handleJoinClick}
-                  status={roomStatus}  
+                  status={roomStatus} 
+                  //mode="join"
                 />
-              
-            </div>
+              </div>
+              <div className="flex">              
+                <JoinRoomButton 
+                  onClick={handleViewClick}
+                  status={roomStatusView}
+                  //mode="view"
+                />
+              </div>
+              </div>
           )}
         </div>
   
@@ -174,6 +187,7 @@ export default function DetailPost() {
           message={modalMessage}
           onConfirm={handleConfirmJoin}
           onCancel={() => setIsModalOpen(false)}
+          
         />
   
         

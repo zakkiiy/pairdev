@@ -1,5 +1,5 @@
 class Room < ApplicationRecord
-  enum status: { open: 0, full: 1 } # 0参加, 1満員
+  enum status: { open: 0, full: 1, joined: 2 } # 0参加, 1満員, 2参加済み
   belongs_to :post
   has_many :room_users, dependent: :destroy
   has_many :messages
