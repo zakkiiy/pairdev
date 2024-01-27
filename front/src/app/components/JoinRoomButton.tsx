@@ -1,39 +1,25 @@
-type RoomStatus = 'full' | 'open' | 'joined';
-
+type RoomStatus = 'full' | 'open' | 'closed テスト';
 
 interface JoinRoomButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  status: RoomStatus | string;
-  
+  status: RoomStatus;
 }
 
 const JoinRoomButton: React.FC<JoinRoomButtonProps> = ({  onClick, status  }) => {
-  let buttonText = '';
-  let buttonStyle = '';
-
-  switch (status) {
-    case 'roomView':
-      buttonText = '閲覧';
-      buttonStyle = 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded';
-      break;
-    case 'full':
-      buttonText = '満員';
-      buttonStyle = 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded';
-      break;
-    case 'open':
-      buttonText = '参加';
-      buttonStyle = 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded';
-      break;
-    default:
-      buttonText = '未定義';
-      buttonStyle = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded';
-  }
-
   return (
-    <button onClick={onClick} className={buttonStyle}>
-      {buttonText}
+    <button
+      onClick={onClick}
+      className={
+        status === 'full'
+          ? 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded'
+          : 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
+      }
+      
+    >
+      {status == 'full' ? '閲覧' : '参加'}
+
     </button>
-  );
-};
+  )
+}
 
 export default JoinRoomButton

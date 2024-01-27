@@ -6,3 +6,5 @@ test:
 
 production:
   adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %> 
+  channel_prefix: app_production

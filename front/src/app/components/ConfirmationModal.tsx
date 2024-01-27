@@ -3,12 +3,11 @@ interface ConfirmationModalProps {
   message: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
-  showCancelButton?: boolean;
 }
 
 
 
-const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel, showCancelButton = true }: ConfirmationModalProps) => {
+const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel }: ConfirmationModalProps) => {
   if (!isOpen) return null;
 
   return (
