@@ -5,6 +5,8 @@ test:
   adapter: postgresql
 
 production:
-  adapter: postgresql
-  url: <%= ENV['DATABASE_URL'] %> 
-  channel_prefix: app_production
+  adapter: async
+  
+  # adapter: postgresql
+  # url: <%= ENV['DATABASE_URL'] %> 
+  # channel_prefix: app_production
