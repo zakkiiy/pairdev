@@ -41,7 +41,7 @@ Rails.application.configure do
     'https://pairdev.vercel.app',
     'https://pairdev.vercel.app/'
   ]
-  config.action_cable.disable_request_forgery_protection = true
+  config.action_cable.disable_request_forgery_protection = false
 
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
