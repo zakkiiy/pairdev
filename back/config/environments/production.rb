@@ -38,8 +38,8 @@ Rails.application.configure do
   config.action_cable.url = 'wss://pairdev.onrender.com/cable'
   config.action_cable.allowed_request_origins = [
     /wss?:\/\/.*/,
-    'https://myapp.vercel.app',
-    'https://myapp.vercel.app/'
+    'https://pairdev.vercel.app',
+    'https://pairdev.vercel.app/'
   ]
   config.action_cable.disable_request_forgery_protection = true
 
