@@ -16,7 +16,7 @@ const JoinRoomButton: React.FC<JoinRoomButtonProps> = ({  onClick, status  }) =>
       }
       
     >
-      {status == 'full' ? '閲覧' : '参加'}
+      {status == 'full' ? '満員' : '参加'}
 
     </button>
   )
