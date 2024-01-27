@@ -14,6 +14,7 @@ import useJoinRoom from '../../hooks/useJoinRoom';
 
 import DeletePostButton from '@/app/components/DeletePostButton';
 import useRoomStatus from '@/app/hooks/useRoomStatus';
+import useCheckJoined from '@/app/hooks/useCheckJoined';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
@@ -46,15 +47,16 @@ export default function DetailPost() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const joinRoom = useJoinRoom(id);
   const router = useRouter();
-  
 
   
   // roomのstatuaを取得するフック呼び出し
   const { roomStatus, isLoading, isError } = useRoomStatus(id);
-  console.log(roomStatus)
+  // ユーザーがroomに参加しているかどうかのステータスを返すフック
+  const { isJoined } = useCheckJoined(id);
+  console.log("aaa")
+  console.log(isJoined)
 
   const modalMessage = roomStatus == 'full' ? '満員のため閲覧のみ可能です。' : '参加するとチャットルームに移動します。' 
-
 
   const { data: rawPost, error } = useSWR<PostData>(url, fetcherWithAuth);
   console.log(rawPost)
@@ -73,7 +75,7 @@ export default function DetailPost() {
   const handleConfirmJoin = () => {
     setIsModalOpen(false);
     if (roomStatus == 'full') {
-      viewOnlyRoom();
+      setIsModalOpen(false);
     } else {
       joinRoom();
     }
@@ -106,7 +108,13 @@ export default function DetailPost() {
           <h2 className="text-2xl font-bold text-gray-900">タイトル: {post.title}</h2>
           {/* 編集・削除ボタン（投稿者のみ表示） */}
           {isPoster && (
-            <div className="flex">
+            <div className="flex space-x-4">
+              <button
+                onClick={() => viewOnlyRoom() }
+                className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
+              >
+                入室
+              </button>
               <Link href={`/user/posts/${id}/edit`}>
                 <div className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100">
                   編集
@@ -118,12 +126,22 @@ export default function DetailPost() {
           {/* 参加ボタンコンポーネント */}
           {!isPoster && (
             <div className="flex">
-              
+              {isJoined ? (
+                <button onClick={() => viewOnlyRoom()}>
+                  参加済み
+                </button>
+              ) : (
                 <JoinRoomButton 
                   onClick={handleJoinClick}
-                  status={roomStatus}  
+                  status={roomStatus}
                 />
-              
+              )}
+              <button
+                onClick={() => viewOnlyRoom()}
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+              >
+                閲覧
+              </button>
             </div>
           )}
         </div>

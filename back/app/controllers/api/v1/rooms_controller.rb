@@ -1,4 +1,6 @@
 class Api::V1::RoomsController < ApplicationController
+  before_action :set_current_user
+
   def show
     post = Post.find(params[:post_id])
     @room = post.room
@@ -17,6 +19,17 @@ class Api::V1::RoomsController < ApplicationController
       render json: { status: post.room.status }
     else
       render json: { error: "Room not found" }, status: :not_found
+    end
+  end
+
+  def join_status
+    post = Post.find(params[:post_id])
+    room = post.room
+  
+    if RoomUser.exists?(user_id: @current_user.id, room_id: room.id)
+      render json: { isJoined: true }
+    else
+      render json: { isJoined: false }
     end
   end
 end

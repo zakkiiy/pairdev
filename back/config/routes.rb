@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :tags, only: [:index]
       resources :posts, only: [:index, :create, :show, :update, :destroy] do
         get 'room_status', to: 'rooms#status'
+        get 'room_join_status', to: 'rooms#join_status'
         resource :room do
           resource :room_user
         end
