@@ -10,6 +10,11 @@ class Api::V1::MessagesController < ApplicationController
   def create
     
     room = Room.find(params[:room_id])
+
+    unless @current_user.room_users.exists?(room: room)
+      return render json: { error: '参加していないルームにはメッセージを送信できません。' }, status: :forbidden
+    end
+    
     message = @current_user.messages.new(message_params.merge(room: room))
 
     if message.save

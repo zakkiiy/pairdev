@@ -11,6 +11,19 @@ class Api::V1::RoomsController < ApplicationController
     end
   end
 
+  def destroy
+    post = Post.find(params[:post_id])
+    room = post.room
+    room_user = @current_user.room_users.find_by(room: room)
+
+    if room_user
+      room_user.destroy
+      render json: { message: "部屋から退出しました" }, status: :ok
+    else
+      render json: { error: "すでに部屋から退出しています" }, status: :not_found
+    end
+  end
+
   def status
     post = Post.find(params[:post_id])
 
