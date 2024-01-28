@@ -11,7 +11,7 @@ const useTags = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/tags`
   const { data: rawTags, error } = useSWR<Tag[]>(url, fetcherWithAuth);
-  const tags = rawTags ? camelcaseKeys(rawTags, {deep:true}) : null;
+  const tags = rawTags ? rawTags : null;
 
   return {
     tags: tags,
