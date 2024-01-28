@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { useState } from 'react'
 
 const useCreateMessage = (roomId: any) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/rooms/${roomId}/messages`
+  const [errorMessage, setErrorMessage] = useState("");
 
   const createMessage = async (messageText: string) => {
     try {
@@ -15,19 +17,11 @@ const useCreateMessage = (roomId: any) => {
         withCredentials: true
       });
     } catch (error: unknown) {
-      // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
-      if (axios.isAxiosError(error)) {
-        console.log(error)
-        // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
-        if (error.response && error.response.data && typeof error.response.data.message === 'string') {
-          //toast.error(error.response.data.message);
-        } else {
-          // その他のエラーの場合は汎用的なメッセージを表示
-          //toast.error("参加に問題が発生しました");
-        }
+      if (axios.isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data.message || "メッセージ送信に失敗しました");
       }
     }
   }
-  return createMessage
+  return { createMessage, errorMessage };
 }
 export default useCreateMessage

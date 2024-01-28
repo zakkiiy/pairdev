@@ -37,7 +37,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
   // メッセージ送信用hooks
-  const createMessage = useCreateMessage(roomId);
+  const { createMessage, errorMessage } = useCreateMessage(roomId);
   const [messageText, setMessageText] = useState("");
   const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET
 
@@ -139,6 +139,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
 
   return (
     <div className="flex flex-col h-auto min-h-[65vh] max-h-[65vh] mx-auto mt-4 mb-4 p-4 bg-gray-200 rounded-lg overflow-auto">
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       {/* メッセージ表示部分 */}
       <div className="flex flex-col space-y-2 overflow-auto flex-grow" ref={messagesContainerRef}>
         {messages.map((message) => {
@@ -151,7 +152,13 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
             >
               <div className="flex items-center">
                 {/* アバター画像 */}
-                {/* <Image src={message.user?.avatar_url} alt="avatar" /> */}
+                <Image
+                  src={session?.user?.image ?? ''}
+                  height={20}
+                  width={20}
+                  style={{ borderRadius: '50px' }}
+                  alt="User Avatar"
+                />
                 <p className="text-sm font-medium">{message.user?.name}</p>
               </div>
               <p className="text-sm" style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>
