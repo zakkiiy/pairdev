@@ -101,7 +101,7 @@ export default function PostForm() {
 
   return (
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-blue-100">
-       {isLoading && (
+      {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
           <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
           <h2 className="mt-5 text-2xl text-white blink">
@@ -109,114 +109,111 @@ export default function PostForm() {
           </h2>
         </div>
       )}
-      <div className="max-w-3xl mx-auto bg-white p-8 shadow-2xl rounded-xl">
-        <h2 className="text-4xl font-bold mb-10 text-center text-gray-800 flex justify-center items-center">
-          <AiOutlineTeam className="mr-2" />
-          新しい投稿を作成
-        </h2>
+      <div className="max-w-3xl mx-auto p-4 bg-white rounded shadow">
+        <h2 className="text-xl font-bold mb-4">新しい投稿を作成</h2>
         <form onSubmit={handleSubmit(createPost)} className="grid grid-cols-1 gap-6">
         <ToastContainer />
-    
-          {/* タイトルフィールド */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+  
+          {/* タイトル */}
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              タイトル
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">タイトル</label>
+            </div>            
             <input
               type="text"
-              className="form-input w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
-              placeholder="プロジェクト名を入力してください"
               {...register("title")}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="プロジェクト名を入力してください"
             />
-            {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+            {errors.title && <p className="text-red-600 text-sm">{errors.title.message}</p>}
           </div>
-
+  
           {/* 技術スタック */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              使用予定技術
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">使用予定技術</label>
+            </div>            
             <input
               type="text"
-              className="form-input w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
-              placeholder="Rails, Ruby, Docker, カンマ区切りで入力"
               {...register("tags")}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Rails, Ruby, Docker, カンマ区切りで入力"
             />
-            {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>}
+            {errors.tags && <p className="text-red-600 text-sm">{errors.tags.message}</p>}
           </div>
-
+  
           {/* 開始日フィールド */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              開始日
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">開始日</label>
+            </div>            
             <input
               type="datetime-local"
-              className="form-input w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
               {...register("start_date")}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            {errors.start_date && <p className="text-red-500 text-sm mt-1">{errors.start_date.message}</p>}
+            {errors.start_date && <p className="text-red-600 text-sm">{errors.start_date.message}</p>}
           </div>
-
+  
           {/* 終了日フィールド */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              終了日
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">終了日</label>              
+            </div>
             <input
               type="datetime-local"
-              className="form-input w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
               {...register("end_date")}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            {errors.end_date && <p className="text-red-500 text-sm mt-1">{errors.end_date.message}</p>}
+            {errors.end_date && <p className="text-red-600 text-sm">{errors.end_date.message}</p>}
           </div>
-
+  
           {/* 募集人数フィールド */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <IoMdAddCircleOutline className="mr-2" />
-              募集人数
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">募集人数</label>
+            </div>
             <select
-              className="form-select w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
               {...register("recruiting_count", { valueAsNumber: true })}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               {[...Array(19)].map((_, i) => (
                 <option key={i + 2} value={i + 2}>{i + 2} 人</option>
               ))}
             </select>
-            {errors.recruiting_count && <p className="text-red-500 text-sm mt-1">{errors.recruiting_count.message}</p>}
+            {errors.recruiting_count && <p className="text-red-600 text-sm">{errors.recruiting_count.message}</p>}
           </div>
-
+  
           {/* 公開ステータス */}
-          <div className="mb-5">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <MdOutlinePublic className="mr-2" />
-              公開ステータス
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">公開ステータス</label>
+            </div>
             <select
-              className="form-select w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
               {...register("status")}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="open">公開中</option>
               <option value="closed">締め切り</option>
             </select>
             {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>}
           </div>
-
+  
           {/* カテゴリー */}
-          <div className="mb-8">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-4">
+            <div className="flex items-center mb-2">
               <FaStar className="mr-2" />
-              募集カテゴリ
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">募集カテゴリ</label>
+            </div>  
             <select
-              className="form-select w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
               {...register("category_id", { valueAsNumber: true })}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value={1}>チーム開発</option>
               <option value={2}>ペアプロ</option>
@@ -225,27 +222,27 @@ export default function PostForm() {
             </select>
             {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id.message}</p>}
           </div>
-
+  
           {/* 説明フィールド */}
-          <div className="mb-10">
-            <label className="block text-xl font-medium text-gray-700 mb-2 flex items-center">
+          <div className="mb-6">
+            <div className="flex items-center mb-2">
               <MdOutlineLock className="mr-2" />
-              募集概要
-            </label>
+              <label className="block text-gray-700 text-sm font-bold">募集概要</label>
+            </div>
             <textarea
-              className="form-textarea w-full px-4 py-3 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
-              rows={5}
-              placeholder="プロジェクトの詳細を入力してください"
               {...register("description")}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              rows={10}
+              placeholder="プロジェクトの詳細を入力してください"
             ></textarea>
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
           </div>
-
+  
           {/* 送信ボタン */}
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               投稿
             </button>
