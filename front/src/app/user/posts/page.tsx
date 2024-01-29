@@ -50,56 +50,53 @@ export default function UserPosts() {
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
 
   return (
-    <div className="container mx-auto px-4 py-6 bg-gray-50 min-h-screen">
+    <div>
       {status === "authenticated" ? (
-        <div>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            マイエリア
-          </span>
-          <div className="grid grid-cols-3 gap-8">
-            {posts?.map((post) => (
-              <Link key={post.id} href={`/posts/${post.id}`} passHref>
-                <div
-                  key={post.id}
-                  className="block p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out h-72 overflow-hidden"
-                >
-                  <h2 className="text-xl font-semibold mb-2 truncate">
-                    <BsCardChecklist className="inline mr-2" />
-                    タイトル: {post.title}
-                  </h2>
-                  <div className="text-gray-700 mb-2 truncate">
-                    <FaLayerGroup className="inline mr-2" />
-                    カテゴリ: {post.categoryName}
-                  </div>
-                  <div className="text-gray-700 mb-2 truncate">
-                    <FaCode className="inline mr-2" />
-                    使用予定技術: {post.tags.join(', ')}
-                  </div>
-                  <div className="text-gray-700 mb-2 truncate">
-                    <FaUsers className="inline mr-2" />
-                    人数: {post.recruitingCount}
-                  </div>
-                  <div className="mb-2 truncate">
-                    <RiCheckboxBlankCircleFill className={`inline mr-2 ${statusColors[post.status]}`} />
-                    ステータス: {post.status}
-                  </div>
-                  <div className="text-gray-700 mb-2 truncate">
-                    <FaCalendarAlt className="inline mr-2" />
-                    開始予定日: {post.startDate}
-                  </div>
-                  <div className="text-gray-700 mb-2 truncate">
-                    <FaCalendarAlt className="inline mr-2" />
-                    終了予定日: {post.endDate}
-                  </div>
-                  <p className="text-gray-600 mt-3 text-sm line-clamp-3">
-                    <BsFillPersonFill className="inline mr-2" />
-                    募集概要: {post.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <div className="container mx-auto px-4 py-6 bg-gray-50 min-h-screen">
+        <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">マイエリア</h1>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts?.map((post) => (
+            <Link key={post.id} href={`/posts/${post.id}`} passHref>
+              <div
+                className="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[320px]"
+              >
+                <h2 className="text-lg font-semibold mb-2 truncate">
+                  <BsCardChecklist className="inline mr-2" />
+                  {post.title}
+                </h2>
+                <p className="text-gray-600 mb-2 truncate">
+                  <FaLayerGroup className="inline mr-2" />
+                  カテゴリ: {post.categoryName}
+                </p>
+                <p className="text-gray-600 mb-2 truncate">
+                  <FaCode className="inline mr-2" />
+                  技術: {post.tags.join(', ')}
+                </p>
+                <p className="text-gray-600 mb-2 truncate">
+                  <FaUsers className="inline mr-2" />
+                  人数: {post.recruitingCount}
+                </p>
+                <p className={`mb-2 truncate ${statusColors[post.status]}`}>
+                  <RiCheckboxBlankCircleFill className="inline mr-2" />
+                  ステータス: {post.status}
+                </p>
+                <p className="text-gray-600 mb-2 truncate">
+                  <FaCalendarAlt className="inline mr-2" />
+                  開始日: {post.startDate}
+                </p>
+                <p className="text-gray-600 mb-2 truncate">
+                  <FaCalendarAlt className="inline mr-2" />
+                  終了日: {post.endDate}
+                </p>
+                <p className="text-gray-600 mt-3 text-sm line-clamp-3">
+                  <BsFillPersonFill className="inline mr-2" />
+                  概要: {post.description}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
+      </div>
       ) : (
         <h1 className="text-center text-xl text-gray-800">ログインしてください</h1>
       )}
