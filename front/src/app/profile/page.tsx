@@ -13,6 +13,7 @@ import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
 interface Profile {
   [key: string]: unknown;
@@ -24,11 +25,11 @@ interface Profile {
 }
 
 interface FormData {
-  localName: string;
-  gender: number;
+  localName: string | null;
+  gender: number  | null;
   age: number | null; // age は null を許容する
-  experience: number;
-  description: string;
+  experience: number  | null;
+  description: string | null;
 }
 
 // バリデーション
@@ -45,44 +46,56 @@ const Profile = () => {
   const url = `${apiUrl}/api/v1/profile/edit_form`
   const { data: rawProfile, error } = useSWR<Profile>(url, fetcherWithAuth);
   const profile = rawProfile ? camelcaseKeys(rawProfile, {deep:true}) : null;
-  console.log(profile)
+  const router = useRouter();
 
   // 初期値をフォームにセット
   const { register, handleSubmit, setValue, formState: {errors} } = useForm<FormData>({
-    resolver: zodResolver(profileSchema),
+    //resolver: zodResolver(profileSchema),
   });
 
   useEffect(() => {
     if (profile) {
       Object.keys(profile).forEach(key => {
-        const value = profile[key];
-        if (value !== null && (typeof value === 'string' || typeof value === 'number')) {
+        let value = profile[key];
+        if (value === null) {
+          value = '';
+        }
+        if (typeof value === 'string' || typeof value === 'number') {
+          console.log(`Setting value for ${key}:`, value);
           setValue(key as keyof FormData, value);
+          console.log("せっと")
+          console.log(setValue)
         }
       });
     }
   }, [profile, setValue]);
 
   const editProfile = async (formData :FormData) => {
+    console.log("Edit Profile Function Called");
+    console.log(formData)
+    console.log("あああああ")
     const formDataRecord = {...formData};
     const session = await getSession();
     const token = session?.accessToken;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
-    const url = `${apiUrl}/api/v1/profile`;
-    const editProfleData = {
-      post: {
+    const url2 = `${apiUrl}/api/v1/profile`;
+    const editProfileData = {
+      profile: {
         ...snakecaseKeys(formDataRecord),
       }
     };
+    console.log(editProfileData)
 
     try {
-      const response = await axios.put(url, editProfleData, {
+      const response = await axios.put(url2, editProfileData, {
         headers: headers,
         withCredentials: true
       });
       toast.success(response.data.message);
+      router.push('/posts');
+      
     } catch (error: unknown) {
       // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
       if (axios.isAxiosError(error)) {
@@ -110,7 +123,7 @@ const Profile = () => {
             <input
               type="text"
               {...register("localName")}
-              defaultValue={profile.localName}
+              defaultValue={profile?.localName}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.localName && <p className="text-red-600 text-sm">{errors.localName.message}</p>}
@@ -121,12 +134,12 @@ const Profile = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2">性別</label>
             <select
               {...register("gender")}
-              defaultValue={profile.gender}
+              defaultValue={profile?.gender ?? "undefined"}
               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value={0}>未定義</option>
-              <option value={1}>男性</option>
-              <option value={2}>女性</option>
+              <option value="undefined">未定義</option>
+              <option value="male">男性</option>
+              <option value="female">女性</option>
             </select>
           </div>
 
@@ -136,7 +149,7 @@ const Profile = () => {
             <input
               type="number"
               {...register("age")}
-              defaultValue={profile.age}
+              defaultValue={profile?.age}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -147,7 +160,7 @@ const Profile = () => {
             <input
               type="number"
               {...register("experience")}
-              defaultValue={profile.experience}
+              defaultValue={profile?.experience}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -157,7 +170,7 @@ const Profile = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2">自己紹介</label>
             <textarea
               {...register("description")}
-              defaultValue={profile.description}
+              defaultValue={profile?.description}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             ></textarea>
           </div>
@@ -167,7 +180,7 @@ const Profile = () => {
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
+            > 
               更新
             </button>
           </div>
