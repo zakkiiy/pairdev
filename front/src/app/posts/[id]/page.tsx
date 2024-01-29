@@ -145,7 +145,6 @@ export default function DetailPost() {
             </div>
           )}
         </div>
-  
         <div className="px-4 py-5 sm:px-6">
           <FaLayerGroup className="inline mr-2" />
           カテゴリ: {post.categoryName}
@@ -179,13 +178,6 @@ export default function DetailPost() {
             </div>
           </dl>
         </div>
-  
-        <div className="px-4 py-4 sm:px-6">
-          <Link href={`/posts/${id}/room`}>
-            <div className="text-indigo-600 hover:text-indigo-900">詳細を見る</div>
-          </Link>
-        </div>
-  
         {/* モーダル表示コンポーネント */}
         <ConfirmationModal 
           isOpen={isModalOpen}
@@ -193,8 +185,6 @@ export default function DetailPost() {
           onConfirm={handleConfirmJoin}
           onCancel={() => setIsModalOpen(false)}
         />
-  
-        
       </div>
     </div>
   );
