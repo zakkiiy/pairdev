@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   post 'auth/:provider/callback', to: 'api/v1/users#create'
   namespace :api do
     namespace :v1 do
+      resource :profile, only: [:index, :edit, :update] do
+        get 'edit_form', on: :member
+      end
       resources :tags, only: [:index]
       resources :posts, only: [:index, :create, :show, :update, :destroy] do
         get 'room_status', to: 'rooms#status'
