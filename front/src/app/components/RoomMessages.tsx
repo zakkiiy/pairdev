@@ -153,7 +153,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
               <div className="flex items-center">
                 {/* アバター画像 */}
                 <Image
-                  src={session?.user?.image ?? ''}
+                  src={message.user.avatar_url ?? ''}
                   height={20}
                   width={20}
                   style={{ borderRadius: '50px' }}
