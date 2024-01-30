@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FaRobot, FaListAlt, FaPlusCircle, FaUserCircle, FaNewspaper } from 'react-icons/fa';
 import Login from './Login';
 import Logout from './Logout';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
 const Header = () => {
   const { data: session, status } = useSession();

@@ -14,6 +14,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import LoginToView from '../components/LoginToView';
 
 interface Profile {
   [key: string]: unknown;
@@ -42,6 +43,7 @@ const profileSchema = z.object({
 })
 
 const Profile = () => {
+  const { data: session, status } = useSession();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/profile/edit_form`
   const { data: rawProfile, error } = useSWR<Profile>(url, fetcherWithAuth);
@@ -61,19 +63,13 @@ const Profile = () => {
           value = '';
         }
         if (typeof value === 'string' || typeof value === 'number') {
-          console.log(`Setting value for ${key}:`, value);
           setValue(key as keyof FormData, value);
-          console.log("せっと")
-          console.log(setValue)
         }
       });
     }
   }, [profile, setValue]);
 
   const editProfile = async (formData :FormData) => {
-    console.log("Edit Profile Function Called");
-    console.log(formData)
-    console.log("あああああ")
     const formDataRecord = {...formData};
     const session = await getSession();
     const token = session?.accessToken;
@@ -86,7 +82,6 @@ const Profile = () => {
         ...snakecaseKeys(formDataRecord),
       }
     };
-    console.log(editProfileData)
 
     try {
       const response = await axios.put(url2, editProfileData, {
@@ -109,6 +104,10 @@ const Profile = () => {
         }
       }
     }
+  }
+
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
   }
 
   return (

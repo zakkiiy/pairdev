@@ -40,7 +40,7 @@ export default function Posts() {
     );
   }
   
-  if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
+  // if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
 
   const statusColors = {
     open: 'text-green-400',

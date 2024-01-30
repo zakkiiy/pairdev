@@ -16,6 +16,9 @@ import { AiOutlineTeam } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
 import useTags from  '../../../hooks/useTags'
+import LoginToView from '../../../components/LoginToView';
+import { useSession } from 'next-auth/react';
+
 
 interface FormData {
   title: string;
@@ -47,6 +50,7 @@ const postSchema = z.object({
 });
 
 export default function PostForm() {
+  const { data: session, status } = useSession();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(postSchema),
   });
@@ -98,6 +102,12 @@ export default function PostForm() {
       }
     }
   };
+
+  // ログインしてない場合の処理
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
+  }
+
 
   return (
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-blue-100">

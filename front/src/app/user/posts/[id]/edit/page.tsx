@@ -19,6 +19,7 @@ import { MdOutlinePublic, MdOutlineLock } from 'react-icons/md';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
+import LoginToView from '../../../../components/LoginToView';
 
 const postSchema = z.object({
   title: z.string().min(5, { message: "タイトルは少なくとも5文字以上必要です。" }),
@@ -137,6 +138,11 @@ export default function EditPost() {
         <Image src="/loading.svg" width={500} height={500} alt="loading..." className="animate-spin" />
       </div>
     );
+  }
+
+  // ログインしてない場合の処理
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
   }
 
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
