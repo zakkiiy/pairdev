@@ -12,12 +12,25 @@ class Post < ApplicationRecord
   validates :recruiting_count, presence: true
   validates :description, presence: true, length: { minimum: 30, maximum: 2000 }
   validates :status, presence: true
+
+  validate :start_date_end_date_valid
   
   def formatted_start_date
-    start_date.strftime("%Y-%m-%d %H:%M:%S")
+    start_date.strftime("%Y-%m-%d")
   end
 
   def formatted_end_date
-    end_date.strftime("%Y-%m-%d %H:%M:%S")
+    end_date.strftime("%Y-%m-%d")
+  end
+
+  private
+  def start_date_end_date_valid
+    if start_date < Date.today
+      errors.add(:start_date, 'は現在の日付より前の日付は入力できません。')
+    end
+
+    if end_date <= start_date
+      errors.add(:end_date, 'は開始日の翌日以降でなければなりません。')
+    end
   end
 end
