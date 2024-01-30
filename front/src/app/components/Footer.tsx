@@ -25,7 +25,6 @@ const Footer = () => {
         </nav>
         <div className="text-sm">
           <p>&copy; {new Date().getFullYear()} PairDev. All rights reserved.</p>
-          <p>ロボットによって構築された未来</p>
         </div>
       </div>
     </footer>
