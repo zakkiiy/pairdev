@@ -14,6 +14,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import LoginToView from '../components/LoginToView';
 
 interface Profile {
   [key: string]: unknown;
@@ -42,6 +43,7 @@ const profileSchema = z.object({
 })
 
 const Profile = () => {
+  const { data: session, status } = useSession();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/profile/edit_form`
   const { data: rawProfile, error } = useSWR<Profile>(url, fetcherWithAuth);
@@ -109,6 +111,10 @@ const Profile = () => {
         }
       }
     }
+  }
+
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
   }
 
   return (

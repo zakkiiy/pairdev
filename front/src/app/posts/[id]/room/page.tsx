@@ -13,6 +13,7 @@ import Modal from '../../../components/Modal'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginToView from '../../../components/LoginToView';
 
 const Room = () => {
   const { data: session, status } = useSession();
@@ -54,6 +55,10 @@ const Room = () => {
         <Image src="/loading.svg" width={500} height={500} alt="loading..." className="animate-spin" />
       </div>
     );
+  }
+
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
   }
 
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;

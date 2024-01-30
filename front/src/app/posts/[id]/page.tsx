@@ -3,7 +3,8 @@
 import useSWR from 'swr';
 import fetcherWithAuth from '../../utils/fetcher';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+
 import camelcaseKeys from "camelcase-keys";
 import Image from 'next/image'
 import Link from 'next/link'
@@ -19,6 +20,7 @@ import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
 import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
+import LoginToView from '../../components/LoginToView';
 
 
 interface PostData {
@@ -39,7 +41,7 @@ interface PostData {
 
 export default function DetailPost() {
   const { data: session, status } = useSession();
-  console.log(session)
+  console.log(status)
   const params = useParams()
   const id = params.id
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -86,6 +88,12 @@ export default function DetailPost() {
     router.push(`/posts/${id}/room`);
   }
 
+  // ログインしてない場合の処理
+  
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
+  }
+
 
   if (status === "loading") {
     return (
@@ -95,11 +103,15 @@ export default function DetailPost() {
     );
   }
 
+  
+
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
 
   if (!post) {
     return <div>Loading...</div>;
   }
+
+  
 
   return (
     <div className="container mx-auto px-4 py-6">

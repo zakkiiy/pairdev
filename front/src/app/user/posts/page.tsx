@@ -11,6 +11,7 @@ import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
 import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
+import LoginToView from '../../components/LoginToView';
 
 interface Post {
   [key: string]: unknown; 
@@ -37,7 +38,6 @@ export default function UserPosts() {
   const { data: session, status } = useSession();
   const { data: rawPosts, error } = useSWR<Post[]>(url, fetcherWithAuth); 
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
-  
 
   if (status === "loading") {
     return (
@@ -45,6 +45,10 @@ export default function UserPosts() {
         <Image src="/loading.svg" width={500} height={500} alt="loading..." className="animate-spin" />
       </div>
     );
+  }
+
+  if (status === "unauthenticated") {
+    return <LoginToView status={status} />;
   }
   
   if (error) return <p className="text-center text-red-500">エラーが発生しました。</p>;
