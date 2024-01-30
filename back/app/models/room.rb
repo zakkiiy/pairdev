@@ -16,6 +16,10 @@ class Room < ApplicationRecord
     end
   end
 
+  def current_participant_count
+    users.count
+  end
+
   private
 
   # RoomUserのレコード作成（参加）

@@ -5,7 +5,10 @@ class Api::V1::RoomsController < ApplicationController
     post = Post.find(params[:post_id])
     @room = post.room
     if @room
-      render json: { room: @room, post: post }
+      is_creator = @current_user.id == post.user_id
+      user_names = @room.users.map(&:name)
+      participant_count = @room.current_participant_count
+      render json: { room: @room, post: post, isCreator: is_creator, userNames: user_names, participantCount: participant_count }
     else
       render json: { error: "Room not found" }, status: :not_found
     end
