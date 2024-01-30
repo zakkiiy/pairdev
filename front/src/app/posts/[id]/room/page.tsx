@@ -15,6 +15,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginToView from '../../../components/LoginToView';
 
+type User = {
+  name: string;
+};
+
 const Room = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -97,10 +101,10 @@ const Room = () => {
           <div className="mt-3">
             <p className="font-semibold mb-2">参加者:</p>
             <div className="flex flex-col">
-              {userNames.map((user, index) => (
+              {userNames.map((user: User, index: number) => (
                 <div key={index} className="flex items-center mb-2">
                   <Image src="/default-avatar.png" height={35} width={35} className="rounded-full" alt="User Avatar" />
-                  <p className="ml-2">{user}</p>
+                  <p className="ml-2">{user.name}</p>
                 </div>
               ))}
             </div>
