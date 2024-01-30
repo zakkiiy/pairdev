@@ -63,19 +63,13 @@ const Profile = () => {
           value = '';
         }
         if (typeof value === 'string' || typeof value === 'number') {
-          console.log(`Setting value for ${key}:`, value);
           setValue(key as keyof FormData, value);
-          console.log("せっと")
-          console.log(setValue)
         }
       });
     }
   }, [profile, setValue]);
 
   const editProfile = async (formData :FormData) => {
-    console.log("Edit Profile Function Called");
-    console.log(formData)
-    console.log("あああああ")
     const formDataRecord = {...formData};
     const session = await getSession();
     const token = session?.accessToken;
@@ -88,7 +82,6 @@ const Profile = () => {
         ...snakecaseKeys(formDataRecord),
       }
     };
-    console.log(editProfileData)
 
     try {
       const response = await axios.put(url2, editProfileData, {
