@@ -4,7 +4,8 @@ class Api::V1::UserPostsController < ApplicationController
   def index
     posts = @current_user.posts.includes(:category,:tags).order(created_at: :desc)
     posts_with_category_names = posts.map do |post|
-      post.attributes.merge({ 
+      post.attributes.merge({
+        'participant_count' => post.room.current_participant_count,
         'tags' => post.tags.map(&:name),
         'category_name' => post.category.name,
         'start_date' => post.formatted_start_date,

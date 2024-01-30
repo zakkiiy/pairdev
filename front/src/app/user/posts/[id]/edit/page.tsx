@@ -194,7 +194,7 @@ export default function EditPost() {
               <label className="block text-gray-700 text-sm font-bold">開始日</label>
             </div>            
             <input
-              type="datetime-local"
+              type="date"
               {...register("start_date")} defaultValue={post.startDate}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
@@ -208,7 +208,7 @@ export default function EditPost() {
               <label className="block text-gray-700 text-sm font-bold">終了日</label>              
             </div>
             <input
-              type="datetime-local"
+              type="date"
               {...register("end_date")} defaultValue={post.endDate}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />

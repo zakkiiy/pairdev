@@ -32,6 +32,7 @@ interface PostData {
     startDate: string,
     endDate: string,
     recruitingCount: number,
+    participantCount: number,
     description: string,
     status: string,
     categoryName: string
@@ -111,8 +112,6 @@ export default function DetailPost() {
     return <div>Loading...</div>;
   }
 
-  
-
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -170,7 +169,7 @@ export default function DetailPost() {
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">人数</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">{post.recruitingCount}</dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2"> {post.participantCount} / {post.recruitingCount}</dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">ステータス</dt>

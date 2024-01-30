@@ -20,6 +20,7 @@ interface Post {
   startDate: string,
   endDate: string,
   recruitingCount: number,
+  participantCount: number,
   description: string,
   status: 'open' | 'closed',
   categoryName: string
@@ -71,7 +72,7 @@ export default function Posts() {
               </p>
               <p className="text-gray-600 mb-2 truncate">
                 <FaUsers className="inline mr-2" />
-                人数: {post.recruitingCount}
+                人数:  {post.participantCount} / {post.recruitingCount}
               </p>
               <p className={`mb-2 truncate ${statusColors[post.status]}`}>
                 <RiCheckboxBlankCircleFill className="inline mr-2" />

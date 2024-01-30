@@ -18,6 +18,7 @@ import { BsPencilSquare } from 'react-icons/bs';
 import useTags from  '../../../hooks/useTags'
 import LoginToView from '../../../components/LoginToView';
 import { useSession } from 'next-auth/react';
+import { parseISO, isAfter, addDays } from 'date-fns';
 
 
 interface FormData {
@@ -161,7 +162,7 @@ export default function PostForm() {
               <label className="block text-gray-700 text-sm font-bold">開始日</label>
             </div>            
             <input
-              type="datetime-local"
+              type="date"
               {...register("start_date")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
@@ -175,7 +176,7 @@ export default function PostForm() {
               <label className="block text-gray-700 text-sm font-bold">終了日</label>              
             </div>
             <input
-              type="datetime-local"
+              type="date"
               {...register("end_date")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
