@@ -45,7 +45,7 @@ const Room = () => {
         withCredentials: true
     });
     setIsLoading(true);
-    toast.success(response.data.message);
+    // toast.success(response.data.message);
     setIsModalOpen(false);
     setTimeout(() => {
       router.push(`/posts`);
