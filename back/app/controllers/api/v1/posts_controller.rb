@@ -5,9 +5,11 @@ module Api
       
       def index
         
-        posts = Post.includes(:category, :tags).order(created_at: :desc).all
+        posts = Post.includes(:category, :tags, :user).order(created_at: :desc).all
         posts_with_category_names = posts.map do |post|
           post.attributes.merge({
+            'name' => post.user.name,
+            'avatar_url' => post.user.avatar_url,
             'participant_count' => post.room.current_participant_count,
             'tags' => post.tags.map(&:name),
             'category_name' => post.category.name,

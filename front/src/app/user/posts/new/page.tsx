@@ -37,7 +37,7 @@ const postSchema = z.object({
   tags: z.string()
     .nonempty({ message: "タグは少なくとも一つ入力してください。" })
     .max(200, { message: "タグは最大200文字までです。" })
-    .regex(/^[\w\-\s,]+$/, { message: "タグは英数字、ハイフン、スペース、カンマのみ使用できます。" }),
+    .regex(/^[\w\-\s,.]+$/, { message: "タグは英数字、ハイフン、スペース、カンマ、ピリオドのみ使用できます。" }),
   start_date: z.string().nonempty({ message: "開始日は必須です。" }),
   end_date: z.string().nonempty({ message: "終了日は必須です。" }),
   recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
@@ -61,14 +61,12 @@ export default function PostForm() {
   const createPost = async (formData :FormData) => {
     const formDataRecord = { ...formData };
     setIsLoading(true);
-    
-    // フォームのバリデーションなどのロジックをここに追加
-    //if (!title || !startDate || !endDate || !description) return;
+
     const session = await getSession();
     const token = session?.accessToken;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const url = `${apiUrl}/api/v1/user_posts`;
     const postData = {
       post: {
@@ -89,15 +87,12 @@ export default function PostForm() {
       }, 5000);
 
     } catch (error: unknown) {
-      // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
-      setIsLoading(false); // ローディング終了
+      setIsLoading(false);
       if (axios.isAxiosError(error)) {
         console.log(error)
-        // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
         if (error.response && error.response.data && typeof error.response.data.message === 'string') {
           toast.error(error.response.data.message);
         } else {
-          // その他のエラーの場合は汎用的なメッセージを表示
           toast.error("投稿に問題が発生しました");
         }
       }
@@ -109,14 +104,13 @@ export default function PostForm() {
     return <LoginToView status={status} />;
   }
 
-
   return (
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-blue-100">
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
           <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
           <h2 className="mt-5 text-2xl text-white blink">
-            チャットルームを作成中です...
+            チャットルームを作成中です
           </h2>
         </div>
       )}
@@ -129,7 +123,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">タイトル</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                タイトル
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="text"
@@ -144,7 +141,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">使用予定技術</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                使用予定技術
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="text"
@@ -159,7 +159,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">開始日</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                開始日予定日
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="date"
@@ -173,7 +176,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">終了日</label>              
+              <label className="block text-gray-700 text-sm font-bold">
+                終了日予定日
+                <span className="text-red-500"> *</span>
+              </label>              
             </div>
             <input
               type="date"
@@ -187,7 +193,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <IoMdAddCircleOutline className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集人数</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集人数
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <select
               {...register("recruiting_count", { valueAsNumber: true })}
@@ -204,14 +213,17 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <MdOutlinePublic className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">公開ステータス</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                公開ステータス<span>(現在公開中のみ)</span>
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <select
               {...register("status")}
               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="open">公開中</option>
-              <option value="closed">締め切り</option>
+              {/* <option value="closed">締め切り</option> */}
             </select>
             {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>}
           </div>
@@ -220,7 +232,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaStar className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集カテゴリ</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集カテゴリ
+                <span className="text-red-500"> *</span>
+              </label>
             </div>  
             <select
               {...register("category_id", { valueAsNumber: true })}
@@ -238,7 +253,10 @@ export default function PostForm() {
           <div className="mb-6">
             <div className="flex items-center mb-2">
               <MdOutlineLock className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集概要</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集概要
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <textarea
               {...register("description")}

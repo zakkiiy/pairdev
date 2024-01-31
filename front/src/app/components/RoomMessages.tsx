@@ -19,6 +19,7 @@ interface RoomMessagesProps {
 interface Message {
   id: number;
   content: string;
+  avatar_url: string;
   user: {
     name: string;
     id: number;
@@ -152,13 +153,13 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
             >
               <div className="flex items-center">
                 {/* アバター画像 */}
-                <Image
-                  src={message.user.avatar_url ?? ''}
+                {/* <Image
+                  src={message.user.avatar_url}
                   height={20}
                   width={20}
                   style={{ borderRadius: '50px' }}
                   alt="User Avatar"
-                />
+                /> */}
                 <p className="text-sm font-medium">{message.user?.name}</p>
               </div>
               <p className="text-sm" style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>

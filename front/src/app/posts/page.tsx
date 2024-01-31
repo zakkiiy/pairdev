@@ -14,6 +14,8 @@ import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 
 interface Post {
   [key: string]: unknown; 
+  name: string,
+  avatarUrl: string,
   id: bigint,
   tags: [],
   title: string,
@@ -32,6 +34,9 @@ export default function Posts() {
   const { data: session, status } = useSession();
   const { data: rawPosts, error } = useSWR<Post[]>(url, fetcherWithAuth); // fetcherWithAuthを使用
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
+
+  console.log("あああ")
+  console.log(posts)
 
   if (status === "loading") {
     return (
@@ -56,8 +61,18 @@ export default function Posts() {
         {posts?.map((post) => (
           <Link key={post.id} href={`/posts/${post.id}`} passHref>
             <div
-              className="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[320px]"
+              className="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[360px]"
             >
+              <div className="flex items-center mb-2">
+                <Image
+                  src={post.avatarUrl ?? ''}
+                  height={20}
+                  width={20}
+                  style={{ borderRadius: '50px' }}
+                  alt="User Avatar"
+                />
+                <p className="ml-2">{post.name}</p>
+              </div>
               <h2 className="text-lg font-semibold mb-2 truncate">
                 <BsCardChecklist className="inline mr-2" />
                 {post.title}
