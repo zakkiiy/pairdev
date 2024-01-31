@@ -60,7 +60,7 @@ export default function UserPosts() {
     <div>
       {status === "authenticated" ? (
         <div className="container mx-auto px-4 py-6 bg-gray-50 min-h-screen">
-        <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">募集一覧</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">マイエリア</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts?.map((post) => (
             <Link key={post.id} href={`/posts/${post.id}`} passHref>
