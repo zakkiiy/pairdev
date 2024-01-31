@@ -138,7 +138,9 @@ export default function DetailPost() {
           {!isPoster && (
             <div className="flex">
               {isJoined ? (
-                <button onClick={() => viewOnlyRoom()}>
+                <button onClick={() => viewOnlyRoom()}
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                >
                   参加済み
                 </button>
               ) : (
