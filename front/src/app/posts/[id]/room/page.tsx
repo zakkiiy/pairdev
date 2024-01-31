@@ -58,7 +58,14 @@ const Room = () => {
   const room = responce?.room
   const participantCount = responce?.participantCount
   const isCreator = responce?.isCreator;
-  const userNames = responce?.userNames
+  const userNames: string[] = responce?.userNames || [];
+  const users = userNames.map((name: string, index: number) => ({
+    name: name,
+    avatarUrl: responce?.avatarUrls[index] // avatarUrlsも同様に、undefinedの場合を考慮
+  }));
+
+  console.log("えええ")
+  console.log(responce)
   
 
   if (status === "loading") {
@@ -97,16 +104,16 @@ const Room = () => {
       {isMenuOpen && (
         <div className="absolute top-14 left-0 right-0 bg-white shadow-lg rounded-lg p-4 z-40 transition-all duration-300">
           <p className="text-md">タイトル: {post?.title}</p>
-          <p className="text-md">人数: {post?.recruitingCount} / {participantCount}</p>
+          <p className="text-md">人数 :  {participantCount} / {post?.recruitingCount}</p>
           <div className="mt-3">
             <p className="font-semibold mb-2">参加者:</p>
             <div className="flex flex-col">
-              {userNames.map((user: User, index: number) => (
-                <div key={index} className="flex items-center mb-2">
-                  <Image src="/default-avatar.png" height={35} width={35} className="rounded-full" alt="User Avatar" />
-                  <p className="ml-2">{user.name}</p>
-                </div>
-              ))}
+            {users.map((user, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <Image src={user.avatarUrl} height={30} width={30} className="rounded-full" alt="User Avatar" />
+                <p className="ml-2">{user.name}</p>
+              </div>
+            ))}
             </div>
           </div>
         </div>
