@@ -14,7 +14,9 @@ import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 import LoginToView from '../../components/LoginToView';
 
 interface Post {
-  [key: string]: unknown; 
+  [key: string]: unknown;
+  name: string,
+  avatarUrl: string,
   id: bigint,
   title: string,
   tags: [],
@@ -58,13 +60,23 @@ export default function UserPosts() {
     <div>
       {status === "authenticated" ? (
         <div className="container mx-auto px-4 py-6 bg-gray-50 min-h-screen">
-        <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">マイエリア</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">募集一覧</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts?.map((post) => (
             <Link key={post.id} href={`/posts/${post.id}`} passHref>
               <div
-                className="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[320px]"
+                className="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[360px]"
               >
+                <div className="flex items-center mb-2">
+                  <Image
+                    src={post.avatarUrl ?? ''}
+                    height={20}
+                    width={20}
+                    style={{ borderRadius: '50px' }}
+                    alt="User Avatar"
+                  />
+                  <p className="ml-2">{post.name}</p>
+                </div>
                 <h2 className="text-lg font-semibold mb-2 truncate">
                   <BsCardChecklist className="inline mr-2" />
                   {post.title}

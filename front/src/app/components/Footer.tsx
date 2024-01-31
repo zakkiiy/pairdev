@@ -1,6 +1,5 @@
 import React from 'react';
-import { FaRobot, FaRegHandshake, FaShieldAlt } from 'react-icons/fa'; // ロボットアイコン
-
+import { FaRobot, FaRegHandshake, FaShieldAlt } from 'react-icons/fa';
 const Footer = () => {
   return(
     <footer className="bg-gradient-to-r from-gray-700 to-gray-900 text-white p-4 mt-10">
