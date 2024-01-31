@@ -6,10 +6,11 @@ class Api::V1::RoomsController < ApplicationController
     @room = post.room
     if @room
       is_creator = @current_user.id == post.user_id
+      is_participant = @room.users.exists?(@current_user.id)
       user_names = @room.users.map(&:name)
       avatar_urls = @room.users.map(&:avatar_url)
       participant_count = @room.current_participant_count
-      render json: { room: @room, post: post, isCreator: is_creator, userNames: user_names, participantCount: participant_count, avatarUrls: avatar_urls }
+      render json: { room: @room, post: post, isCreator: is_creator, isParticipant: is_participant, userNames: user_names, participantCount: participant_count, avatarUrls: avatar_urls }
     else
       render json: { error: "Room not found" }, status: :not_found
     end

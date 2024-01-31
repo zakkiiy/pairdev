@@ -44,29 +44,23 @@ const Room = () => {
     toast.success(response.data.message);
     setIsModalOpen(false);
     } catch (error) {
-      // エラーが発生した場合の処理
       console.error("退出処理中にエラーが発生しました:", error);
     }
   }
 
   const { data: rawResponse, error } = useSWR(url, fetcherWithAuth);
   const responce = rawResponse ? camelcaseKeys(rawResponse, {deep:true}) : null;
-  console.log("あああ")
-  console.log(responce)
   
   const post = responce?.post
   const room = responce?.room
   const participantCount = responce?.participantCount
+  const isParticipant = responce?.isParticipant;
   const isCreator = responce?.isCreator;
   const userNames: string[] = responce?.userNames || [];
   const users = userNames.map((name: string, index: number) => ({
     name: name,
     avatarUrl: responce?.avatarUrls[index] // avatarUrlsも同様に、undefinedの場合を考慮
   }));
-
-  console.log("えええ")
-  console.log(responce)
-  
 
   if (status === "loading") {
     return (
@@ -120,7 +114,7 @@ const Room = () => {
       )}
 
       {/* 投稿者のみ退出ボタンを非公開 */}
-      {!isCreator && (
+      {!isCreator && isParticipant && (
         <button
           onClick={handleModalOpen}
           className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
@@ -138,7 +132,6 @@ const Room = () => {
       <RoomMessages roomId={room.id} />
     </div>
   );
-
 }
 
 export default Room;
