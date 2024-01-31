@@ -37,7 +37,7 @@ const postSchema = z.object({
   tags: z.string()
     .nonempty({ message: "タグは少なくとも一つ入力してください。" })
     .max(200, { message: "タグは最大200文字までです。" })
-    .regex(/^[\w\-\s,]+$/, { message: "タグは英数字、ハイフン、スペース、カンマのみ使用できます。" }),
+    .regex(/^[\w\-\s,.]+$/, { message: "タグは英数字、ハイフン、スペース、カンマ、ピリオドのみ使用できます。" }),
   start_date: z.string().nonempty({ message: "開始日は必須です。" }),
   end_date: z.string().nonempty({ message: "終了日は必須です。" }),
   recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
@@ -61,14 +61,12 @@ export default function PostForm() {
   const createPost = async (formData :FormData) => {
     const formDataRecord = { ...formData };
     setIsLoading(true);
-    
-    // フォームのバリデーションなどのロジックをここに追加
-    //if (!title || !startDate || !endDate || !description) return;
+
     const session = await getSession();
     const token = session?.accessToken;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const url = `${apiUrl}/api/v1/user_posts`;
     const postData = {
       post: {
@@ -89,15 +87,12 @@ export default function PostForm() {
       }, 5000);
 
     } catch (error: unknown) {
-      // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
-      setIsLoading(false); // ローディング終了
+      setIsLoading(false);
       if (axios.isAxiosError(error)) {
         console.log(error)
-        // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
         if (error.response && error.response.data && typeof error.response.data.message === 'string') {
           toast.error(error.response.data.message);
         } else {
-          // その他のエラーの場合は汎用的なメッセージを表示
           toast.error("投稿に問題が発生しました");
         }
       }
@@ -109,14 +104,13 @@ export default function PostForm() {
     return <LoginToView status={status} />;
   }
 
-
   return (
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-blue-100">
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
           <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
           <h2 className="mt-5 text-2xl text-white blink">
-            チャットルームを作成中です...
+            チャットルームを作成中です
           </h2>
         </div>
       )}
