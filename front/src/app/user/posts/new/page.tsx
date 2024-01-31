@@ -123,7 +123,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">タイトル</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                タイトル
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="text"
@@ -138,7 +141,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <BsPencilSquare className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">使用予定技術</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                使用予定技術
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="text"
@@ -153,7 +159,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">開始日</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                開始日予定日
+                <span className="text-red-500"> *</span>
+              </label>
             </div>            
             <input
               type="date"
@@ -167,7 +176,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaRegCalendarAlt className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">終了日</label>              
+              <label className="block text-gray-700 text-sm font-bold">
+                終了日予定日
+                <span className="text-red-500"> *</span>
+              </label>              
             </div>
             <input
               type="date"
@@ -181,7 +193,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <IoMdAddCircleOutline className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集人数</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集人数
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <select
               {...register("recruiting_count", { valueAsNumber: true })}
@@ -198,14 +213,17 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <MdOutlinePublic className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">公開ステータス</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                公開ステータス<span>(現在公開中のみ)</span>
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <select
               {...register("status")}
               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="open">公開中</option>
-              <option value="closed">締め切り</option>
+              {/* <option value="closed">締め切り</option> */}
             </select>
             {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>}
           </div>
@@ -214,7 +232,10 @@ export default function PostForm() {
           <div className="mb-4">
             <div className="flex items-center mb-2">
               <FaStar className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集カテゴリ</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集カテゴリ
+                <span className="text-red-500"> *</span>
+              </label>
             </div>  
             <select
               {...register("category_id", { valueAsNumber: true })}
@@ -232,7 +253,10 @@ export default function PostForm() {
           <div className="mb-6">
             <div className="flex items-center mb-2">
               <MdOutlineLock className="mr-2" />
-              <label className="block text-gray-700 text-sm font-bold">募集概要</label>
+              <label className="block text-gray-700 text-sm font-bold">
+                募集概要
+                <span className="text-red-500"> *</span>
+              </label>
             </div>
             <textarea
               {...register("description")}

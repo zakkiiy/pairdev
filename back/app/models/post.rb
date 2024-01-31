@@ -25,11 +25,11 @@ class Post < ApplicationRecord
 
   private
   def start_date_end_date_valid
-    if start_date < Date.today
+    if start_date < Date.current - 1.day
       errors.add(:start_date, 'は現在の日付より前の日付は入力できません。')
     end
 
-    if end_date <= start_date
+    if end_date < start_date
       errors.add(:end_date, 'は開始日の翌日以降でなければなりません。')
     end
   end
