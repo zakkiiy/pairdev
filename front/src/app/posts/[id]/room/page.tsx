@@ -21,10 +21,12 @@ type User = {
 
 const Room = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const { data: session, status } = useSession();
   const params = useParams()
   const id = params.id
+  const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}/room`
   
@@ -36,14 +38,21 @@ const Room = () => {
     const session = await getSession();
     const token = session?.accessToken;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
     try {
       const response = await axios.delete(`${apiUrl}/api/v1/posts/${id}/room`, {
         headers: headers,
         withCredentials: true
     });
+    setIsLoading(true);
     toast.success(response.data.message);
     setIsModalOpen(false);
+    setTimeout(() => {
+      router.push(`/posts`);
+      setIsLoading(false);
+    }, 3000);    
     } catch (error) {
+      setIsLoading(false);
       console.error("退出処理中にエラーが発生しました:", error);
     }
   }
@@ -85,6 +94,14 @@ const Room = () => {
 
   return (
     <div className="relative container mx-auto p-4">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+          <h2 className="mt-5 text-2xl text-white blink">
+            チャットルームから退出中です。
+          </h2>
+        </div>
+      )}
       <div className="flex justify-between items-center mb-4">
         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex flex-col justify-around w-8 h-6 z-50">
           <div className="w-full h-1 bg-black rounded"></div>
