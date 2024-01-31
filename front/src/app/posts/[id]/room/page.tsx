@@ -59,7 +59,7 @@ const Room = () => {
   const userNames: string[] = responce?.userNames || [];
   const users = userNames.map((name: string, index: number) => ({
     name: name,
-    avatarUrl: responce?.avatarUrls[index] // avatarUrlsも同様に、undefinedの場合を考慮
+    avatarUrl: responce?.avatarUrls[index]
   }));
 
   if (status === "loading") {
@@ -113,15 +113,37 @@ const Room = () => {
         </div>
       )}
 
-      {/* 投稿者のみ退出ボタンを非公開 */}
-      {!isCreator && isParticipant && (
-        <button
-          onClick={handleModalOpen}
-          className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
-        >
-          退出
-        </button>
-      )}
+      <div className="flex justify-center my-4">
+        <div className="bg-gradient-to-r from-blue-100 via-gray-300 to-blue-100 text-gray-800 p-4 rounded shadow-lg max-w-md text-center">
+          {isCreator ? (
+            <p>管理者：あなたは部屋の管理者です。</p>
+          ) : isParticipant ? (
+            <p>ステータス：参加中</p>
+          ) : (
+            <div>
+              <p>ステータス：閲覧中</p>
+              <p>閲覧中のためメッセージを送ることはできません</p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* 投稿者と閲覧者は退出ボタンを非公開 */}
+      <div className="flex justify-end">
+        {!isCreator && isParticipant && (
+         <div className="flex justify-between items-center">
+          <p className="text-xs text-gray-600">
+            注意：退出ボタンを押すと、部屋から完全に退出し、メッセージを送信できなくなります。
+          </p>
+          <button
+            onClick={handleModalOpen}
+            className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
+          >
+            退出
+          </button>
+       </div>
+        )}
+      </div>
       <Modal 
         isOpen={isModalOpen} 
         onClose={handleModalClose}
