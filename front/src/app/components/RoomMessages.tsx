@@ -64,6 +64,7 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   // メッセージの取得
   // useStateのmessageの値を更新
   const { data: rawMessages, error } = useSWR(initialMessagesUrl, fetcherWithAuth, {
+    refreshInterval: 3000,
     onSuccess: (data) => {
       const reversedData = camelcaseKeys(data, { deep: true }).reverse();
       setMessages(reversedData);
