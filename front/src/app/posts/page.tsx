@@ -35,9 +35,6 @@ export default function Posts() {
   const { data: rawPosts, error } = useSWR<Post[]>(url, fetcherWithAuth); // fetcherWithAuthを使用
   const posts = rawPosts ? rawPosts.map((post :Post) => camelcaseKeys(post, {deep:true})) : null;
 
-  console.log("あああ")
-  console.log(posts)
-
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen">

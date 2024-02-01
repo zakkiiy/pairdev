@@ -16,7 +16,6 @@ class ApplicationController < ActionController::API
   private
 
   def set_current_user
-    Rails.logger.info "Current session: #{session.inspect}"  # セッション情報をログに出力
     received_access_token = request.headers["Authorization"].split(' ').last
 
     if session[:user_id] && session[:access_token] == received_access_token

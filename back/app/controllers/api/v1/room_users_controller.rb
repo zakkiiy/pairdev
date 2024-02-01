@@ -32,8 +32,6 @@ class Api::V1::RoomUsersController < ApplicationController
         render json: { error: "参加失敗" }, status: :unprocessable_entity
       end
     else
-      Rails.logger.info "参加失敗: 現在の参加者数 #{room.room_users.count} / 募集人数 #{post.recruiting_count}"
-  
     end
   end
 end

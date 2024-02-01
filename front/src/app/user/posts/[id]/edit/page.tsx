@@ -104,7 +104,6 @@ export default function EditPost() {
         tags: formDataRecord.tags,
       }
     };
-    console.log(editPostData)
 
     try {
       const response = await axios.put(url, editPostData, {
@@ -120,7 +119,7 @@ export default function EditPost() {
     } catch (error: unknown) {
       // エラーオブジェクトがAxiosError型のインスタンスであるかをチェック
       if (axios.isAxiosError(error)) {
-        console.log(error)
+        
         // エラーレスポンスが存在し、その中にメッセージがある場合は表示する
         if (error.response && error.response.data && typeof error.response.data.message === 'string') {
           toast.error(error.response.data.message);

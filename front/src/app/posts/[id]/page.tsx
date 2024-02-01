@@ -42,7 +42,6 @@ interface PostData {
 
 export default function DetailPost() {
   const { data: session, status } = useSession();
-  console.log(status)
   const params = useParams()
   const id = params.id
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -56,17 +55,12 @@ export default function DetailPost() {
   const { roomStatus, isLoading, isError } = useRoomStatus(id);
   // ユーザーがroomに参加しているかどうかのステータスを返すフック
   const { isJoined } = useCheckJoined(id);
-  console.log("aaa")
-  console.log(isJoined)
 
   const modalMessage = roomStatus == 'full' ? '満員のため閲覧のみ可能です。' : '参加するとチャットルームに移動します。' 
 
   const { data: rawPost, error } = useSWR<PostData>(url, fetcherWithAuth);
-  console.log(rawPost)
   const post = rawPost ? camelcaseKeys(rawPost.post, {deep:true}) : null;
   const isPoster = rawPost ? rawPost.is_poster : false;
-  console.log(isPoster)
-  
 
   // 参加ボタンをクリックするとモーダルが開く
   const handleJoinClick = () => {

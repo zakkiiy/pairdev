@@ -7,11 +7,10 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def update
-    p params
     if @current_user.profile.update(profile_params)
-      p '成功'
+      Rails.logger.info 'プロファイル更新：成功'
     else
-      p '失敗'
+      Rails.logger.warn 'プロファイル更新：失敗'
     end
   end
 

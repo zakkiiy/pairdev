@@ -45,12 +45,10 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
 
   useEffect(() => {
     const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
-    console.log(cable)
     const subscription = cable.subscriptions.create(
       { channel: 'ChatChannel', room_id: roomId },
       {
         received(data) {
-          console.log("受信したデータ:", data);
           const { message } = data;
           setMessages(prev => [...prev, message]) 
         }

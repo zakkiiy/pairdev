@@ -89,7 +89,7 @@ export default function PostForm() {
     } catch (error: unknown) {
       setIsLoading(false);
       if (axios.isAxiosError(error)) {
-        console.log(error)
+      
         if (error.response && error.response.data && typeof error.response.data.message === 'string') {
           toast.error(error.response.data.message);
         } else {
