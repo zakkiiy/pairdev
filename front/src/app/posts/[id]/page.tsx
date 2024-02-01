@@ -21,7 +21,7 @@ import { FaCode, FaLaptopCode, FaTerminal } from 'react-icons/fa';
 import { FaCalendarAlt, FaUsers, FaLayerGroup } from 'react-icons/fa';
 import { BsFillPersonFill, BsCardChecklist } from 'react-icons/bs';
 import LoginToView from '../../components/LoginToView';
-
+import TwitterShareButton from '../../components/TwitterShareButton';
 
 interface PostData {
   post: {
@@ -49,6 +49,7 @@ export default function DetailPost() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const joinRoom = useJoinRoom(id);
   const router = useRouter();
+  const shareUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 
   
   // roomのstatuaを取得するフック呼び出し
@@ -114,6 +115,7 @@ export default function DetailPost() {
           {/* 編集・削除ボタン（投稿者のみ表示） */}
           {isPoster && (
             <div className="flex space-x-4">
+              <TwitterShareButton twitterUrl={`${shareUrl}/api/v1/posts/${id}`} />
               <button
                 onClick={() => viewOnlyRoom() }
                 className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"

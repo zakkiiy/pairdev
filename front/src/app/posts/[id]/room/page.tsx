@@ -14,6 +14,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginToView from '../../../components/LoginToView';
+import TwitterShareButton from '../../../components/TwitterShareButton';
 
 type User = {
   name: string;
@@ -38,6 +39,7 @@ const Room = () => {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}/room`
+  const shareUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   const [profileToShow, setProfileToShow] = useState<any>(null);
   const handleMouseOver = (profile :any) => {
     setProfileToShow(profile);
@@ -175,7 +177,10 @@ const Room = () => {
       <div className="flex justify-center my-4">
         <div className="bg-gradient-to-r from-blue-100 via-gray-300 to-blue-100 text-gray-800 p-4 rounded shadow-lg max-w-md text-center">
           {isCreator ? (
-            <p>管理者：あなたは部屋の管理者です。</p>
+            <div>
+              <p>管理者：あなたは部屋の管理者です。</p>
+              <TwitterShareButton twitterUrl={`${shareUrl}/api/v1/posts/${id}`} />
+              </div>
           ) : isParticipant ? (
             <p>ステータス：参加中</p>
           ) : (
