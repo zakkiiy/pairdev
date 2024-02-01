@@ -28,7 +28,7 @@ interface Profile {
 interface FormData {
   localName: string | null;
   gender: number  | null;
-  age: number | null; // age は null を許容する
+  age: number | null;
   experience: number  | null;
   description: string | null;
 }
@@ -149,6 +149,8 @@ const Profile = () => {
               type="number"
               {...register("age")}
               defaultValue={profile?.age}
+              min="0"
+              max="99"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -160,6 +162,8 @@ const Profile = () => {
               type="number"
               {...register("experience")}
               defaultValue={profile?.experience}
+              min="0"
+              max="99"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>

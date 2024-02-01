@@ -17,7 +17,16 @@ import LoginToView from '../../../components/LoginToView';
 
 type User = {
   name: string;
+  avatarUrl: string;
+  profile: {
+    localName: string | null;
+    gender: 'male' | 'female' | 'undefined' | null;
+    age: number | null;
+    experience: number | null;
+    description: string | null;
+  };
 };
+
 
 const Room = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,7 +38,15 @@ const Room = () => {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}/room`
+  const [profileToShow, setProfileToShow] = useState<any>(null);
+  const handleMouseOver = (profile :any) => {
+    setProfileToShow(profile);
+  };
   
+  
+  const handleMouseOut = () => {
+    setProfileToShow(null);
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
@@ -58,18 +75,28 @@ const Room = () => {
   }
 
   const { data: rawResponse, error } = useSWR(url, fetcherWithAuth);
-  const responce = rawResponse ? camelcaseKeys(rawResponse, {deep:true}) : null;
-  
-  const post = responce?.post
-  const room = responce?.room
-  const participantCount = responce?.participantCount
-  const isParticipant = responce?.isParticipant;
-  const isCreator = responce?.isCreator;
-  const userNames: string[] = responce?.userNames || [];
-  const users = userNames.map((name: string, index: number) => ({
-    name: name,
-    avatarUrl: responce?.avatarUrls[index]
-  }));
+  const response = rawResponse ? camelcaseKeys(rawResponse, {deep:true}) : null;
+
+  const post = response?.post
+  const room = response?.room
+  const participantCount = response?.participantCount
+  const isParticipant = response?.isParticipant;
+  const isCreator = response?.isCreator;
+  // よう修正
+  const users: User[] = response ? (response.userNames as any[]).map((name, index) => {
+    const profileData = (response.profiles as any[])[index];
+    return {
+      name: name,
+      avatarUrl: (response.avatarUrls as any[])[index],
+      profile: {
+        localName: profileData?.localName || null,
+        gender: profileData?.gender || null,
+        age: profileData?.age || null,
+        experience: profileData?.experience || null,
+        description: profileData?.description || null
+      }
+    };
+  }) : [];
 
   if (status === "loading") {
     return (
@@ -119,13 +146,28 @@ const Room = () => {
           <div className="mt-3">
             <p className="font-semibold mb-2">参加者:</p>
             <div className="flex flex-col">
-            {users.map((user, index) => (
-              <div key={index} className="flex items-center mb-2">
-                <Image src={user.avatarUrl} height={30} width={30} className="rounded-full" alt="User Avatar" />
-                <p className="ml-2">{user.name}</p>
-              </div>
-            ))}
+              {users.map((user, index) => (
+                <div
+                  key={index}
+                  className="flex items-center mb-2"
+                  onMouseOver={() => handleMouseOver(user.profile)}
+                  onMouseOut={handleMouseOut}
+                >
+                  <Image src={user.avatarUrl} height={30} width={30} className="rounded-full" alt="User Avatar" />
+                  <p className="ml-2">{user.name}</p>
+                </div>
+              ))}
             </div>
+            {/* プロフィール情報の表示 */}
+            {profileToShow && (
+              <div className="bg-gray-100 p-4 mt-2 rounded">
+              <p>名前: {profileToShow.localName || '未設定'}</p>
+              <p>性別: {profileToShow.gender === 'male' ? '男性' : profileToShow.gender === 'female' ? '女性' : '未設定'}</p>
+              <p>年齢: {profileToShow.age ? `${profileToShow.age} 歳` : '未設定'}</p>
+              <p>経験年数: {profileToShow.experience ? `${profileToShow.experience} 年` : '未設定'}</p>
+              <p>自己紹介: {profileToShow.description || '自己紹介はありません'}</p>
+            </div>
+            )}
           </div>
         </div>
       )}
