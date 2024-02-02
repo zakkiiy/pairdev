@@ -84,7 +84,7 @@ export default function PostForm() {
       setTimeout(() => {
         router.push(`/posts/${response.data.data.id}/room`);
         setIsLoading(false);
-      }, 5000);
+      }, 3000);
 
     } catch (error: unknown) {
       setIsLoading(false);
