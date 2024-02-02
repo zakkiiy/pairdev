@@ -10,7 +10,7 @@ class Post < ApplicationRecord
   validates :start_date, presence: true
   validates :end_date, presence: true
   validates :recruiting_count, presence: true
-  validates :description, presence: true, length: { minimum: 30, maximum: 2000 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 2000 }
   validates :status, presence: true
 
   validate :start_date_end_date_valid
