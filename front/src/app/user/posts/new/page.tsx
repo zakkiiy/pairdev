@@ -42,7 +42,7 @@ const postSchema = z.object({
   end_date: z.string().nonempty({ message: "終了日は必須です。" }),
   recruiting_count: z.number().min(2).max(20, { message: "募集人数は2から20の間である必要があります。" }),
   description: z.string()
-    .min(30, { message: "少なくとも30文字以上の入力が必要です。" })
+    .min(10, { message: "少なくとも10文字以上の入力が必要です。" })
     .max(2000, { message: "最大2000文字までです。" }),
   status: z.enum(['open', 'closed']).refine(val => ['open', 'closed'].includes(val), { 
     message: "ステータスは'open'または'closed'である必要があります。" 
@@ -244,7 +244,8 @@ export default function PostForm() {
               <option value={1}>チーム開発</option>
               <option value={2}>ペアプロ</option>
               <option value={3}>GitHub-Flow</option>
-              {/* その他のオプション */}
+              <option value={4}>コードレビュー</option>
+              
             </select>
             {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id.message}</p>}
           </div>
