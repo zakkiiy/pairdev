@@ -13,10 +13,12 @@ const Header = () => {
   return (
     <header className="bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <div className="flex items-center space-x-4">
-          <FaRobot className="text-3xl text-blue-500" />
-          <h1 className="text-2xl font-semibold">PairDev</h1>
-        </div>
+        <Link href="/">
+          <div className="flex items-center space-x-4">
+            <FaRobot className="text-3xl text-blue-500" />
+            <h1 className="text-2xl font-semibold">PairDev</h1>          
+          </div>
+        </Link>
         <nav className="hidden md:block">
           <ul className="flex space-x-6 items-center">
             <li>
