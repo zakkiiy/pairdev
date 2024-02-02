@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import { Poppins } from "next/font/google";
 const HachiMaruPopFont = Poppins({ weight: "500", subsets: ["latin"] });
 import { GoogleAnalytics } from '@next/third-parties/google'
-
+const gaId = process.env.NEXT_PUBLIC_GOOGLE || 'default-ga-id';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default function RootLayout({
             <main className="flex-1">
               {children}
             </main>
-            <GoogleAnalytics gaId="G-XYZ" />
+            {gaId && <GoogleAnalytics gaId={gaId} />}
           <Footer />
         </NextAuthProvider>
       </body>
