@@ -9,11 +9,11 @@ const Footer = () => {
           <span className="text-xl font-bold">PairDev</span>
         </div>
         <nav className="flex justify-center items-center space-x-6">
-          <a href="/terms" className="flex flex-col items-center hover:text-blue-400">
+          <a href="/terms_of_use" className="flex flex-col items-center hover:text-blue-400">
             <FaRegHandshake className="text-2xl"/>
             <span className="mt-1">利用規約</span>
           </a>
-          <a href="/privacy" className="flex flex-col items-center hover:text-blue-400">
+          <a href="/privacy_policy" className="flex flex-col items-center hover:text-blue-400">
             <FaShieldAlt className="text-2xl"/>
             <span className="mt-1">プライバシーポリシー</span>
           </a>
