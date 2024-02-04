@@ -17,7 +17,7 @@ const Footer = () => {
             <FaShieldAlt className="text-2xl"/>
             <span className="mt-1">プライバシーポリシー</span>
           </a>
-          <a href="/contact" className="flex flex-col items-center hover:text-blue-400">
+          <a href="https://twitter.com/zakkii_y" target="_blank" className="flex flex-col items-center hover:text-blue-400">
             <FaRobot className="text-2xl"/>
             <span className="mt-1">連絡先</span>
           </a>
