@@ -143,7 +143,7 @@ export default function DetailPost() {
             <div className="flex">
               {isJoined ? (
                 <button onClick={() => viewOnlyRoom()}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded"
                 >
                   参加済み
                 </button>
@@ -155,7 +155,7 @@ export default function DetailPost() {
               )}
               <button
                 onClick={() => viewOnlyRoom()}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-12 rounded"
               >
                 閲覧
               </button>

@@ -11,8 +11,8 @@ const JoinRoomButton: React.FC<JoinRoomButtonProps> = ({  onClick, status  }) =>
       onClick={onClick}
       className={
         status === 'full'
-          ? 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded'
-          : 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
+          ? 'bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-12 rounded'
+          : 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-12 rounded'
       }
       
     >
