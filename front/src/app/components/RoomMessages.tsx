@@ -43,23 +43,23 @@ const RoomMessages: React.FC<RoomMessagesProps> = ({ roomId }) => {
   const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET
 
 
-  useEffect(() => {
-    const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
-    const subscription = cable.subscriptions.create(
-      { channel: 'ChatChannel', room_id: roomId },
-      {
-        received(data) {
-          const { message } = data;
-          setMessages(prev => [...prev, message]) 
-        }
-      }
-    );
+  // useEffect(() => {
+  //   const cable = ActionCable.createConsumer(`${websocketUrl}/cable`);
+  //   const subscription = cable.subscriptions.create(
+  //     { channel: 'ChatChannel', room_id: roomId },
+  //     {
+  //       received(data) {
+  //         const { message } = data;
+  //         setMessages(prev => [...prev, message]) 
+  //       }
+  //     }
+  //   );
   
-    return () => {
-      subscription.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId]);
+  //   return () => {
+  //     subscription.unsubscribe();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [roomId]);
 
   // メッセージの取得
   // useStateのmessageの値を更新
