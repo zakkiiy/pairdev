@@ -69,7 +69,7 @@ const Room = () => {
     setTimeout(() => {
       router.push(`/posts`);
       setIsLoading(false);
-    }, 3000);    
+    }, 2000);
     } catch (error) {
       setIsLoading(false);
       console.error("退出処理中にエラーが発生しました:", error);

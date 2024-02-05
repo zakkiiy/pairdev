@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  match '*path', controller: 'application', action: 'handle_options_request', via: :options
+  # match '*path', controller: 'application', action: 'handle_options_request', via: :options
   mount ActionCable.server => '/cable'
   post 'auth/:provider/callback', to: 'api/v1/users#create'
   namespace :api do

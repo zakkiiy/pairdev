@@ -47,13 +47,13 @@ export default function DetailPost() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const url = `${apiUrl}/api/v1/posts/${id}`
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const joinRoom = useJoinRoom(id);
+  const {joinRoom, isLoading} = useJoinRoom(id);
   const router = useRouter();
   const shareUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 
   
   // roomのstatuaを取得するフック呼び出し
-  const { roomStatus, isLoading, isError } = useRoomStatus(id);
+  const { roomStatus, isError } = useRoomStatus(id);
   // ユーザーがroomに参加しているかどうかのステータスを返すフック
   const { isJoined } = useCheckJoined(id);
 
@@ -109,6 +109,14 @@ export default function DetailPost() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+          <h2 className="mt-5 text-2xl text-white blink">
+            チャットルームに参加中です。
+          </h2>
+        </div>
+      )}
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="flex justify-between items-center px-4 py-5 sm:px-6">
           <h2 className="text-2xl font-bold text-gray-900">タイトル: {post.title}</h2>

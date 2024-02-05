@@ -245,6 +245,7 @@ export default function PostForm() {
               <option value={2}>ペアプロ</option>
               <option value={3}>GitHub-Flow</option>
               <option value={4}>コードレビュー</option>
+              <option value={999}>その他</option>
               
             </select>
             {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id.message}</p>}
