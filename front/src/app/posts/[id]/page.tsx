@@ -123,7 +123,10 @@ export default function DetailPost() {
           {/* 編集・削除ボタン（投稿者のみ表示） */}
           {isPoster && (
             <div className="flex space-x-4">
-              <TwitterShareButton twitterUrl={`${shareUrl}posts/${id}`} />
+              <TwitterShareButton
+                twitterUrl={`${shareUrl}posts/${id}`}
+                postTitle={post?.title}
+              />
               <button
                 onClick={() => viewOnlyRoom() }
                 className="inline-flex items-center px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-100"
