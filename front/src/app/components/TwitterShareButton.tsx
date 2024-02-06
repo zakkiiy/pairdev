@@ -9,7 +9,7 @@ const TwitterShareButton = ({ twitterUrl } :any) => {
     <button className="icon"
       onClick={() => {
         window.open(
-          `https://twitter.com/share?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(tweetText)}`,
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(tweetText)}`,
           '_blank'
         );
       }}
