@@ -179,7 +179,9 @@ const Room = () => {
           {isCreator ? (
             <div>
               <p>管理者：あなたは部屋の管理者です。</p>
-              <TwitterShareButton twitterUrl={`${shareUrl}posts/${id}`} />
+              <TwitterShareButton 
+                twitterUrl={`${shareUrl}posts/${id}`}
+                postTitle={post?.title} />
               </div>
           ) : isParticipant ? (
             <p>ステータス：参加中</p>
