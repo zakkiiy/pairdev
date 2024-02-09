@@ -78,6 +78,7 @@ PostTags {
 Rooms {
 	bigint id PK
   bigint post_id FK
+	bigint status
 	datetime created_at
 	datetime updated_at
 }
