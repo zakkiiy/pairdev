@@ -10,3 +10,9 @@ AllCops:
 require:
   - rubocop-rails
   - rubocop-capybara
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/MethodLength:
+  Max: 20

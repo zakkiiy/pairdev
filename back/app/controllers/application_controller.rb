@@ -2,24 +2,25 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+# apprication_controller
 class ApplicationController < ActionController::API
   include ActionController::Cookies
 
-  # def handle_options_request  
-  #   response.headers['Access-Control-Allow-Origin'] = '*'  
-  #   response.headers['Access-Control-Allow-Methods'] = 'GET, POST' 
+  # def handle_options_request
+  #   response.headers['Access-Control-Allow-Origin'] = '*'
+  #   response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
   #   response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-  
-  #   head :ok 
+
+  #   head :ok
   # end
 
   private
 
   def set_current_user
-    received_access_token = request.headers["Authorization"].split(' ').last
+    received_access_token = request.headers["Authorization"].split.last
 
     if session[:user_id] && session[:access_token] == received_access_token
-      
+
       # セッションからユーザー情報を取得
       @current_user = User.find_by(id: session[:user_id])
     else

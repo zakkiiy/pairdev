@@ -5,9 +5,7 @@ module Api
         # 既存のユーザーをUIDで検索
         user = User.find_by(provider: params[:provider], uid: params[:uid])
         # ユーザーが存在しなければ新しく作成
-        unless user
-          user = User.create(provider: params[:provider], avatar_url: params[:avatar_url], uid: params[:uid], name: params[:name])
-        end
+        user ||= User.create(provider: params[:provider], avatar_url: params[:avatar_url], uid: params[:uid], name: params[:name])
 
         if user
           head :ok

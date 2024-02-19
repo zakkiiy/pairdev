@@ -1,3 +1,4 @@
+# Room model represents a room in the application.
 class Room < ApplicationRecord
   enum status: { open: 0, full: 1, joined: 2 } # 0参加, 1満員, 2参加済み
   belongs_to :post

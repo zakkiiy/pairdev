@@ -37,12 +37,11 @@ Rails.application.configure do
   # config.action_cable.mount_path = nil
   config.action_cable.url = 'wss://pairdev.onrender.com/cable'
   config.action_cable.allowed_request_origins = [
-    /wss?:\/\/.*/,
+    %r{wss?://.*},
     'https://pairdev.vercel.app',
     'https://pairdev.vercel.app/'
   ]
   config.action_cable.disable_request_forgery_protection = false
-
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true

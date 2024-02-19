@@ -1,3 +1,4 @@
+# Profile model represents a profile in the application.
 class Profile < ApplicationRecord
   belongs_to :user
 

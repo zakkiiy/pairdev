@@ -24,8 +24,6 @@ Rails.application.routes.draw do
       resources :rooms, only: [] do
         resources :messages
       end
-
     end
-    
   end
 end
