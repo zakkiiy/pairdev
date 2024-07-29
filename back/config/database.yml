@@ -84,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: pairdev_database_uyc8
-  username: pairdev_database_uyc8_user
+  database: pairdev_database_yjgt
+  username: pairdev_database
   url: <%= ENV['DATABASE_URL'] %>
