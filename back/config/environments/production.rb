@@ -35,7 +35,7 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://pairdev.onrender.com/cable'
+  config.action_cable.url = 'wss://pairdev-dlw9.onrender.com/cable'
   config.action_cable.allowed_request_origins = [
     %r{wss?://.*},
     'https://pairdev.vercel.app',

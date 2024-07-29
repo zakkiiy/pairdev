@@ -1,6 +1,6 @@
 databases:
   - name: pairdev
-    databaseName: pairdev_database_uyc8
+    databaseName: pairdev_database_0bbi
     user: pairdev
     region: singapore
 
