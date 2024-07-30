@@ -115,7 +115,7 @@ export default function UserPosts() {
                         </h2>
                         <p className="text-gray-600 mb-2 truncate">
                           <FaLayerGroup className="inline mr-2" />
-                          カテゴリ: {post.categoryName}
+                          カテゴリー: {post.categoryName}
                         </p>
                         <p className="text-gray-600 mb-2 truncate">
                           <FaCode className="inline mr-2" />
